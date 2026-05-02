@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useAISettings } from '@/modules/teacher/useAISettings';
 import { useAuthStore } from '@/store/authStore';
 import { router } from 'expo-router';
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function AISettingsScreen() {
   const { user } = useAuthStore();
@@ -26,151 +27,151 @@ export default function AISettingsScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView className="flex-1 bg-wrenly-background justify-center items-center">
-        <ActivityIndicator size="large" color="#00C896" />
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#FAFAFA', justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#00665E" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-wrenly-background" edges={['top']}>
-      <StatusBar style="light" />
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#FAFAFA' }} edges={['top']}>
+      <StatusBar style="dark" />
 
       {/* Header */}
-      <View className="px-6 py-4 flex-row items-center border-b border-wrenly-border bg-wrenly-surface">
-        <TouchableOpacity onPress={() => router.back()} className="mr-4">
-          <Text className="text-wrenly-text text-xl font-bold">←</Text>
+      <View style={{ paddingHorizontal: 24, paddingVertical: 16, flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#F0F2F5', backgroundColor: '#FFFFFF' }}>
+        <TouchableOpacity onPress={() => router.back()} style={{ marginRight: 16 }}>
+          <Feather name="arrow-left" size={24} color="#2C3E50" />
         </TouchableOpacity>
-        <View className="flex-1">
-          <Text className="text-wrenly-text font-bold font-poppins text-lg" numberOfLines={1}>
-            Wrenly AI Co-Pilot Settings
+        <View style={{ flex: 1 }}>
+          <Text style={{ color: '#2C3E50', fontWeight: '800', fontSize: 18 }} numberOfLines={1}>
+            Wrenly AI Co-Pilot
           </Text>
         </View>
-        <View className="bg-wrenly-danger/20 px-2 py-1 rounded">
-          <Text className="text-[10px] font-bold text-wrenly-danger uppercase tracking-wider">Admin Dashboard</Text>
+        <View style={{ backgroundColor: '#FFF0ED', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 4 }}>
+          <Text style={{ fontSize: 10, fontWeight: '800', color: '#FF4757', textTransform: 'uppercase', letterSpacing: 0.5 }}>Settings</Text>
         </View>
       </View>
 
-      <ScrollView contentContainerClassName="p-6 pb-32">
+      <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 100 }}>
         
         {/* Target Simplification Level */}
-        <View className="mb-8">
-          <Text className="text-lg font-bold text-wrenly-text font-poppins mb-1">
+        <View style={{ marginBottom: 32 }}>
+          <Text style={{ fontSize: 18, fontWeight: '800', color: '#2C3E50', marginBottom: 4 }}>
             Target Simplification Level
           </Text>
-          <Text className="text-sm text-wrenly-textSecondary mb-4">
+          <Text style={{ fontSize: 13, color: '#6A7A82', marginBottom: 16 }}>
             Adjust how Wrenly simplifies uploaded materials for your students.
           </Text>
 
-          <View className="flex-row bg-wrenly-surface rounded-full p-1 border border-wrenly-border mb-3 shadow-sm">
+          <View style={{ flexDirection: 'row', backgroundColor: '#F0F2F5', borderRadius: 100, padding: 4, marginBottom: 12 }}>
             {[4, 7, 10].map((level) => (
               <TouchableOpacity
                 key={level}
                 onPress={() => updateSetting('target_grade_level', level)}
-                className={`flex-1 py-3 items-center rounded-full ${settings.target_grade_level === level ? 'bg-wrenly-primary shadow-sm' : 'bg-transparent'}`}
+                style={{ flex: 1, paddingVertical: 12, alignItems: 'center', borderRadius: 100, backgroundColor: settings.target_grade_level === level ? '#FFFFFF' : 'transparent', shadowColor: settings.target_grade_level === level ? '#000' : 'transparent', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: settings.target_grade_level === level ? 1 : 0 }}
               >
-                <Text className={`font-bold text-sm ${settings.target_grade_level === level ? 'text-wrenly-text' : 'text-wrenly-textSecondary'}`}>
+                <Text style={{ fontWeight: '700', fontSize: 14, color: settings.target_grade_level === level ? '#00665E' : '#8A9BA8' }}>
                   Grade {level}
                 </Text>
               </TouchableOpacity>
             ))}
           </View>
-          <Text className="text-sm text-wrenly-textSecondary italic ml-2">
+          <Text style={{ fontSize: 13, color: '#8A9BA8', fontStyle: 'italic', paddingHorizontal: 8 }}>
             • {getLevelDescription(settings.target_grade_level)}
           </Text>
         </View>
 
         {/* Quizzes */}
-        <View className="bg-wrenly-surface p-4 rounded-2xl border border-wrenly-border mb-6 flex-row items-center justify-between shadow-sm">
-          <View className="flex-1 pr-4">
-            <Text className="text-wrenly-text font-semibold text-base mb-1 font-poppins">
+        <View style={{ backgroundColor: '#FFFFFF', padding: 20, borderRadius: 16, borderWidth: 1, borderColor: '#F0F2F5', marginBottom: 24, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 1 }}>
+          <View style={{ flex: 1, paddingRight: 16 }}>
+            <Text style={{ color: '#2C3E50', fontWeight: '800', fontSize: 16, marginBottom: 4 }}>
               Auto-generate Quizzes
             </Text>
-            <Text className="text-wrenly-textSecondary text-xs">
+            <Text style={{ color: '#6A7A82', fontSize: 12 }}>
               Automatically create a 5-question quiz for every new lesson.
             </Text>
           </View>
           <Switch
             value={settings.auto_generate_quiz}
             onValueChange={(val) => updateSetting('auto_generate_quiz', val)}
-            trackColor={{ false: '#333344', true: '#00C896' }}
+            trackColor={{ false: '#E2E8F0', true: '#00665E' }}
             thumbColor={'#FFFFFF'}
           />
         </View>
 
         {/* Language Translation Support */}
-        <View className="mb-8">
-          <Text className="text-lg font-bold text-wrenly-text font-poppins mb-4">
+        <View style={{ marginBottom: 32 }}>
+          <Text style={{ fontSize: 18, fontWeight: '800', color: '#2C3E50', marginBottom: 16 }}>
             Language Translation Support
           </Text>
           
-          <View className="bg-wrenly-surface p-4 rounded-t-2xl border border-wrenly-border border-b-0 flex-row items-center justify-between">
-            <View className="flex-1 pr-4">
-              <Text className="text-wrenly-text font-semibold text-sm mb-1 font-poppins">Enable Tagalog Translation</Text>
+          <View style={{ backgroundColor: '#FFFFFF', padding: 20, borderTopLeftRadius: 16, borderTopRightRadius: 16, borderWidth: 1, borderColor: '#F0F2F5', borderBottomWidth: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ flex: 1, paddingRight: 16 }}>
+              <Text style={{ color: '#2C3E50', fontWeight: '700', fontSize: 15 }}>Enable Tagalog Translation</Text>
             </View>
             <Switch
               value={settings.enable_tl}
               onValueChange={(val) => updateSetting('enable_tl', val)}
-              trackColor={{ false: '#333344', true: '#00C896' }}
+              trackColor={{ false: '#E2E8F0', true: '#00665E' }}
               thumbColor={'#FFFFFF'}
             />
           </View>
           
-          <View className="bg-wrenly-surface p-4 rounded-b-2xl border border-wrenly-border flex-row items-center justify-between shadow-sm">
-            <View className="flex-1 pr-4">
-              <Text className="text-wrenly-text font-semibold text-sm mb-1 font-poppins">Enable Bisaya Dialect</Text>
+          <View style={{ backgroundColor: '#FFFFFF', padding: 20, borderBottomLeftRadius: 16, borderBottomRightRadius: 16, borderWidth: 1, borderColor: '#F0F2F5', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 1 }}>
+            <View style={{ flex: 1, paddingRight: 16 }}>
+              <Text style={{ color: '#2C3E50', fontWeight: '700', fontSize: 15 }}>Enable Bisaya Dialect</Text>
             </View>
             <Switch
               value={settings.enable_ceb}
               onValueChange={(val) => updateSetting('enable_ceb', val)}
-              trackColor={{ false: '#333344', true: '#00C896' }}
+              trackColor={{ false: '#E2E8F0', true: '#00665E' }}
               thumbColor={'#FFFFFF'}
             />
           </View>
         </View>
 
         {/* AI Model Card */}
-        <View className="bg-wrenly-primary/10 p-5 rounded-2xl border border-wrenly-primary mb-6 flex-row items-center shadow-sm">
-          <View className="w-12 h-12 bg-wrenly-primary rounded-full items-center justify-center mr-4">
-            <Text className="text-wrenly-background font-bold text-xl">🤖</Text>
+        <View style={{ backgroundColor: '#E8F7F5', padding: 20, borderRadius: 16, borderWidth: 1, borderColor: '#00665E', marginBottom: 24, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ width: 48, height: 48, backgroundColor: '#00665E', borderRadius: 24, alignItems: 'center', justifyContent: 'center', marginRight: 16 }}>
+            <MaterialCommunityIcons name="robot-outline" size={24} color="#FFFFFF" />
           </View>
-          <View className="flex-1">
-            <Text className="text-wrenly-primary font-bold text-base mb-1 font-poppins">
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: '#00665E', fontWeight: '800', fontSize: 16, marginBottom: 4 }}>
               AI Learning Model v4.2
             </Text>
-            <Text className="text-wrenly-primary text-xs opacity-90">
+            <Text style={{ color: '#00665E', fontSize: 12, opacity: 0.8 }}>
               Optimized for regional education standards.
             </Text>
           </View>
         </View>
 
         {/* Timestamps */}
-        <View className="mb-10 items-center">
-          <Text className="text-wrenly-textSecondary text-xs">
+        <View style={{ marginBottom: 40, alignItems: 'center' }}>
+          <Text style={{ color: '#8A9BA8', fontSize: 12 }}>
             {lastUpdated 
               ? `Last updated: ${new Date(lastUpdated).toLocaleString()}` 
               : 'Unsaved changes'}
           </Text>
-          <Text className="text-wrenly-textSecondary text-xs mt-1">
+          <Text style={{ color: '#8A9BA8', fontSize: 12, marginTop: 4 }}>
             Editor: {user?.full_name || 'Teacher'}
           </Text>
         </View>
 
         {/* Action Buttons */}
-        <View className="flex-row justify-between mb-8">
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 32 }}>
           <TouchableOpacity 
             onPress={discardChanges}
             disabled={isSaving}
-            className="flex-1 bg-wrenly-surface border border-wrenly-border py-4 rounded-xl items-center mr-2 shadow-sm"
+            style={{ flex: 1, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E2E8F0', paddingVertical: 16, borderRadius: 12, alignItems: 'center', marginRight: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1 }}
           >
-            <Text className="text-wrenly-text font-bold text-base">Discard</Text>
+            <Text style={{ color: '#566B80', fontWeight: '800', fontSize: 16 }}>Discard</Text>
           </TouchableOpacity>
           <TouchableOpacity 
             onPress={saveSettings}
             disabled={isSaving}
-            className={`flex-1 bg-wrenly-primary py-4 rounded-xl items-center ml-2 shadow-sm ${isSaving ? 'opacity-70' : ''}`}
+            style={{ flex: 1, backgroundColor: '#00665E', paddingVertical: 16, borderRadius: 12, alignItems: 'center', marginLeft: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 8, elevation: 3, opacity: isSaving ? 0.7 : 1 }}
           >
-            <Text className="text-wrenly-text font-bold text-base">
+            <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 16 }}>
               {isSaving ? 'Saving...' : 'Save AI'}
             </Text>
           </TouchableOpacity>

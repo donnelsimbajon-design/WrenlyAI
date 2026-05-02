@@ -7,10 +7,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome5, Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function StudentLoginScreen() {
-  const [lrn, setLrn] = useState('');
-  const [password, setPassword] = useState('');
+  const [lrn, setLrn] = useState('123456789012');
+  const [password, setPassword] = useState('password123');
   const [showPassword, setShowPassword] = useState(false);
-  const [parentalConsent, setParentalConsent] = useState(false);
+  const [parentalConsent, setParentalConsent] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ lrn?: string; password?: string; consent?: string }>({});
 
@@ -27,6 +27,13 @@ export default function StudentLoginScreen() {
 
     setErrors({});
     setLoading(true);
+
+    // TEMPORARY DEVELOPMENT BYPASS
+    if (lrn === '123456789012' && password === 'password123') {
+      router.replace('/(student)/dashboard');
+      setLoading(false);
+      return;
+    }
 
     try {
       // In this example, LRN is used as email prefix for student login: {lrn}@student.wrenly.ai

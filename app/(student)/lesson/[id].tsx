@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useLessonView, LanguageMode } from '@/modules/lessons/useLessonView';
 import { OfflineBanner } from '@/components/ui/OfflineBanner';
+import { Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 // Helper to bold key terms enclosed in **
 const renderBoldText = (text: string) => {
@@ -12,9 +13,9 @@ const renderBoldText = (text: string) => {
   const parts = text.split(/(\*\*.*?\*\*)/g);
   return parts.map((part, index) => {
     if (part.startsWith('**') && part.endsWith('**')) {
-      return <Text key={index} className="font-bold text-wrenly-primary">{part.slice(2, -2)}</Text>;
+      return <Text key={index} style={{ fontWeight: '800', color: '#00665E' }}>{part.slice(2, -2)}</Text>;
     }
-    return <Text key={index}>{part}</Text>;
+    return <Text key={index} style={{ color: '#2C3E50', lineHeight: 24 }}>{part}</Text>;
   });
 };
 
@@ -36,20 +37,20 @@ export default function LessonScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView className="flex-1 bg-wrenly-background justify-center items-center">
-        <ActivityIndicator size="large" color="#00C896" />
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#FAFAFA', justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#00665E" />
       </SafeAreaView>
     );
   }
 
   if (error || !lesson) {
     return (
-      <SafeAreaView className="flex-1 bg-wrenly-background justify-center items-center px-6">
-        <Text className="text-wrenly-danger font-bold text-xl mb-4 text-center">
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#FAFAFA', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 24 }}>
+        <Text style={{ color: '#FF4757', fontWeight: '800', fontSize: 18, marginBottom: 16, textAlign: 'center' }}>
           {error || 'Lesson not found'}
         </Text>
-        <TouchableOpacity onPress={() => router.back()} className="bg-wrenly-surface px-6 py-3 rounded-xl border border-wrenly-border">
-          <Text className="text-wrenly-text">Go Back</Text>
+        <TouchableOpacity onPress={() => router.back()} style={{ backgroundColor: '#FFFFFF', paddingHorizontal: 24, paddingVertical: 12, borderRadius: 12, borderWidth: 1, borderColor: '#E2E8F0' }}>
+          <Text style={{ color: '#2C3E50', fontWeight: '700' }}>Go Back</Text>
         </TouchableOpacity>
       </SafeAreaView>
     );
@@ -66,37 +67,37 @@ export default function LessonScreen() {
   const content = getContent();
 
   return (
-    <SafeAreaView className="flex-1 bg-wrenly-background" edges={['top']}>
-      <StatusBar style="light" />
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#FAFAFA' }} edges={['top']}>
+      <StatusBar style="dark" />
       <OfflineBanner />
 
       {/* Header */}
-      <View className="px-6 py-4 flex-row items-center border-b border-wrenly-border bg-wrenly-surface">
-        <TouchableOpacity onPress={() => router.back()} className="mr-4">
-          <Text className="text-wrenly-text text-xl font-bold">←</Text>
+      <View style={{ paddingHorizontal: 24, paddingVertical: 16, flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#F0F2F5', backgroundColor: '#FFFFFF' }}>
+        <TouchableOpacity onPress={() => router.back()} style={{ marginRight: 16 }}>
+          <Feather name="arrow-left" size={24} color="#2C3E50" />
         </TouchableOpacity>
-        <View className="flex-1 pr-2">
-          <Text className="text-wrenly-text font-bold font-poppins text-lg" numberOfLines={1}>
+        <View style={{ flex: 1, paddingRight: 8 }}>
+          <Text style={{ color: '#2C3E50', fontWeight: '800', fontSize: 18 }} numberOfLines={1}>
             {lesson.title || 'Untitled Lesson'}
           </Text>
         </View>
-        <View className={`px-2 py-1 rounded ${isOnline ? 'bg-wrenly-primary/20' : 'bg-wrenly-warning/20'}`}>
-          <Text className={`text-[10px] font-bold uppercase ${isOnline ? 'text-wrenly-primary' : 'text-wrenly-warning'}`}>
+        <View style={{ backgroundColor: isOnline ? '#E8F7F5' : '#FFF7E6', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 4 }}>
+          <Text style={{ fontSize: 10, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 0.5, color: isOnline ? '#00665E' : '#F5A623' }}>
             {isOnline ? 'Cloud Mode' : 'Offline Mode'}
           </Text>
         </View>
       </View>
 
-      <ScrollView contentContainerClassName="p-6 pb-40">
+      <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 160 }}>
         {/* Language Toggle Pill */}
-        <View className="bg-wrenly-surface rounded-full flex-row p-1 mb-6 border border-wrenly-border">
+        <View style={{ backgroundColor: '#F0F2F5', borderRadius: 100, flexDirection: 'row', padding: 4, marginBottom: 24 }}>
           {(['en', 'tl', 'ceb'] as LanguageMode[]).map((lang) => (
             <TouchableOpacity
               key={lang}
               onPress={() => toggleLanguage(lang)}
-              className={`flex-1 py-2 items-center rounded-full ${language === lang ? 'bg-wrenly-primary shadow-sm' : 'bg-transparent'}`}
+              style={{ flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 100, backgroundColor: language === lang ? '#FFFFFF' : 'transparent', shadowColor: language === lang ? '#000' : 'transparent', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: language === lang ? 1 : 0 }}
             >
-              <Text className={`text-sm font-bold ${language === lang ? 'text-wrenly-text' : 'text-wrenly-textSecondary'}`}>
+              <Text style={{ fontSize: 14, fontWeight: '700', color: language === lang ? '#00665E' : '#8A9BA8' }}>
                 {lang === 'en' ? 'English' : lang === 'tl' ? 'Tagalog' : 'Bisaya'}
               </Text>
             </TouchableOpacity>
@@ -104,42 +105,41 @@ export default function LessonScreen() {
         </View>
 
         {/* Lesson Thumbnail/Image */}
-        <View className="w-full h-48 bg-wrenly-surface rounded-2xl border border-wrenly-border items-center justify-center mb-6 overflow-hidden">
+        <View style={{ width: '100%', height: 192, backgroundColor: '#FFFFFF', borderRadius: 16, borderWidth: 1, borderColor: '#F0F2F5', alignItems: 'center', justifyContent: 'center', marginBottom: 24, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 12, elevation: 2 }}>
           {lesson.materials?.storage_path ? (
-            <Text className="text-wrenly-textSecondary">Image attached</Text>
+            <Text style={{ color: '#8A9BA8' }}>Image attached</Text>
           ) : (
-            <Text className="text-5xl">📖</Text>
+            <Ionicons name="book" size={64} color="#E2E8F0" />
           )}
         </View>
 
         {/* AI-Simplified Lesson Content */}
-        <View className="bg-wrenly-surface p-6 rounded-2xl border border-wrenly-border">
-          <Text className="text-wrenly-text text-base leading-relaxed font-inter">
-            {content ? renderBoldText(content) : <Text className="text-wrenly-textSecondary italic">Content not generated for this language yet.</Text>}
+        <View style={{ backgroundColor: '#FFFFFF', padding: 24, borderRadius: 16, borderWidth: 1, borderColor: '#F0F2F5', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 12, elevation: 2 }}>
+          <Text style={{ fontSize: 16, lineHeight: 28 }}>
+            {content ? renderBoldText(content) : <Text style={{ color: '#8A9BA8', fontStyle: 'italic' }}>Content not generated for this language yet.</Text>}
           </Text>
         </View>
       </ScrollView>
 
       {/* Audio Player Bar */}
-      <View className="absolute bottom-0 left-0 right-0 bg-wrenly-surface border-t border-wrenly-border p-6 shadow-lg">
-        <View className="flex-row items-center">
+      <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#F0F2F5', padding: 24, paddingBottom: 40, shadowColor: '#000', shadowOffset: { width: 0, height: -4 }, shadowOpacity: 0.05, shadowRadius: 12, elevation: 10 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity 
             onPress={togglePlay}
             disabled={!content}
-            className={`w-14 h-14 rounded-full bg-wrenly-primary items-center justify-center mr-4 ${!content ? 'opacity-50' : ''}`}
+            style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: '#00665E', alignItems: 'center', justifyContent: 'center', marginRight: 16, opacity: !content ? 0.5 : 1 }}
           >
-            <Text className="text-wrenly-text font-bold text-xl ml-1">{isPlaying ? '⏸' : '▶'}</Text>
+            <Ionicons name={isPlaying ? "pause" : "play"} size={24} color="#FFFFFF" style={{ marginLeft: isPlaying ? 0 : 4 }} />
           </TouchableOpacity>
           
-          <View className="flex-1">
-            <Text className="text-wrenly-text font-semibold text-sm mb-2 font-poppins">
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: '#2C3E50', fontWeight: '800', fontSize: 14, marginBottom: 8 }}>
               Listen in {language === 'en' ? 'English' : language === 'tl' ? 'Tagalog' : 'Bisaya'}
             </Text>
             {/* Seek Bar */}
-            <View className="h-2 bg-wrenly-background rounded-full overflow-hidden w-full">
+            <View style={{ height: 6, backgroundColor: '#F0F2F5', borderRadius: 3, overflow: 'hidden', width: '100%' }}>
               <View 
-                className="h-full bg-wrenly-primary rounded-full transition-all duration-300"
-                style={{ width: `${playbackPosition}%` }}
+                style={{ height: '100%', backgroundColor: '#00665E', borderRadius: 3, width: `${playbackPosition}%` }}
               />
             </View>
           </View>
