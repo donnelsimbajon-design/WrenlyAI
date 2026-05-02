@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
 import { supabase } from '@/services/supabase';
+import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function TeacherLoginScreen() {
   const [email, setEmail] = useState('');
@@ -32,13 +32,13 @@ export default function TeacherLoginScreen() {
       });
 
       if (error) throw error;
-      
+
       const { data: profile } = await supabase
         .from('profiles')
         .select('role')
         .eq('id', data.user.id)
         .single();
-        
+
       if (profile?.role === 'student') {
         throw new Error('Students must use the Student Login portal.');
       }
@@ -56,7 +56,7 @@ export default function TeacherLoginScreen() {
       <StatusBar style="light" />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
         <ScrollView contentContainerClassName="flex-grow px-6 pt-16 pb-8" keyboardShouldPersistTaps="handled">
-          
+
           <View className="items-center mb-12">
             <View className="w-20 h-20 rounded-2xl bg-wrenly-accent items-center justify-center mb-6 shadow-lg">
               <Text className="text-wrenly-text text-4xl font-bold">W</Text>
@@ -93,7 +93,7 @@ export default function TeacherLoginScreen() {
                   secureTextEntry={!showPassword}
                   className={`h-12 pl-4 pr-12 rounded-xl text-base text-wrenly-text bg-wrenly-background border ${errors.password ? 'border-wrenly-danger' : 'border-wrenly-border'}`}
                 />
-                <TouchableOpacity 
+                <TouchableOpacity
                   className="absolute right-4"
                   onPress={() => setShowPassword(!showPassword)}
                 >
