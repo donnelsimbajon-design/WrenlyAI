@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Alert, Pressable } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
 import { supabase } from '@/services/supabase';
-import { useAuthStore } from '@/store/authStore';
+import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View, Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { FontAwesome5, Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function StudentLoginScreen() {
   const [lrn, setLrn] = useState('');
@@ -37,14 +37,14 @@ export default function StudentLoginScreen() {
       });
 
       if (error) throw error;
-      
+
       // Ensure role is student
       const { data: profile } = await supabase
         .from('profiles')
         .select('role')
         .eq('id', data.user.id)
         .single();
-        
+
       if (profile?.role === 'teacher') {
         throw new Error('Please use the Teacher Login portal.');
       }
@@ -58,89 +58,114 @@ export default function StudentLoginScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-wrenly-background">
-      <StatusBar style="light" />
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
-        <ScrollView contentContainerClassName="flex-grow px-6 pt-16 pb-8" keyboardShouldPersistTaps="handled">
-          
-          <View className="items-center mb-12">
-            <View className="w-20 h-20 rounded-2xl bg-wrenly-primary items-center justify-center mb-6 shadow-lg">
-              <Text className="text-wrenly-text text-4xl font-bold">W</Text>
-            </View>
-            <Text className="text-3xl font-bold text-wrenly-text tracking-tight mb-2">Wrenly AI</Text>
-            <Text className="text-sm text-wrenly-textSecondary text-center px-4">
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#F4F9F9' }}>
+      <StatusBar style="dark" />
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 24, paddingTop: 48, paddingBottom: 24 }} keyboardShouldPersistTaps="handled">
+
+          {/* Header */}
+          <View className="items-center mb-6">
+            <Image source={require('@/assets/images/logo-with-text.png')} style={{ width: 380, height: 130, marginBottom: 4, resizeMode: 'contain' }} />
+            <Text style={{ color: '#6A7A82', fontSize: 13, textAlign: 'center', paddingHorizontal: 20 }}>
               Empowering students through intelligent learning
             </Text>
           </View>
 
-          <View className="bg-wrenly-surface rounded-[16px] border border-wrenly-border p-6 shadow-sm mb-6">
-            <View className="mb-5">
-              <Text className="text-sm font-semibold text-wrenly-text mb-2">Student LRN (12 Digits)</Text>
-              <TextInput
-                value={lrn}
-                onChangeText={(text) => { setLrn(text); setErrors(e => ({ ...e, lrn: undefined })); }}
-                placeholder="000000000000"
-                placeholderTextColor="#A0A0B0"
-                keyboardType="numeric"
-                maxLength={12}
-                className={`h-12 px-4 rounded-xl text-base text-wrenly-text bg-wrenly-background border ${errors.lrn ? 'border-wrenly-danger' : 'border-wrenly-border'}`}
-              />
-              {errors.lrn && <Text className="text-xs text-wrenly-danger mt-1">{errors.lrn}</Text>}
+          {/* Main Card */}
+          <View style={{ backgroundColor: '#FFFFFF', borderRadius: 12, padding: 24, paddingBottom: 32, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 12, elevation: 3, marginBottom: 32 }}>
+            
+            {/* LRN Input */}
+            <View style={{ marginBottom: 20 }}>
+              <Text style={{ fontSize: 11, fontWeight: '800', color: '#566B80', marginBottom: 8, letterSpacing: 0.5 }}>STUDENT LRN (LEARNER REFERENCE NUMBER)</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', height: 48, backgroundColor: '#FCFDFD', borderWidth: 1, borderColor: errors.lrn ? '#FF4757' : '#E2E8F0', borderRadius: 8, paddingHorizontal: 12 }}>
+                <FontAwesome5 name="id-badge" size={16} color="#8A9BA8" style={{ marginRight: 10 }} />
+                <TextInput
+                  value={lrn}
+                  onChangeText={(text) => { setLrn(text); setErrors(e => ({ ...e, lrn: undefined })); }}
+                  placeholder="Enter your 12-digit LRN"
+                  placeholderTextColor="#A0AEBA"
+                  keyboardType="numeric"
+                  maxLength={12}
+                  style={{ flex: 1, fontSize: 14, color: '#2C3E50' }}
+                />
+              </View>
+              {errors.lrn && <Text style={{ fontSize: 12, color: '#FF4757', marginTop: 4 }}>{errors.lrn}</Text>}
             </View>
 
-            <View className="mb-5">
-              <Text className="text-sm font-semibold text-wrenly-text mb-2">Password</Text>
-              <View className="relative justify-center">
+            {/* Password Input */}
+            <View style={{ marginBottom: 20 }}>
+              <Text style={{ fontSize: 11, fontWeight: '800', color: '#566B80', marginBottom: 8, letterSpacing: 0.5 }}>PASSWORD</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', height: 48, backgroundColor: '#FCFDFD', borderWidth: 1, borderColor: errors.password ? '#FF4757' : '#E2E8F0', borderRadius: 8, paddingHorizontal: 12 }}>
+                <FontAwesome5 name="lock" size={14} color="#8A9BA8" style={{ marginRight: 10 }} />
                 <TextInput
                   value={password}
                   onChangeText={(text) => { setPassword(text); setErrors(e => ({ ...e, password: undefined })); }}
-                  placeholder="Enter your password"
-                  placeholderTextColor="#A0A0B0"
+                  placeholder="••••••••"
+                  placeholderTextColor="#A0AEBA"
                   secureTextEntry={!showPassword}
-                  className={`h-12 pl-4 pr-12 rounded-xl text-base text-wrenly-text bg-wrenly-background border ${errors.password ? 'border-wrenly-danger' : 'border-wrenly-border'}`}
+                  style={{ flex: 1, fontSize: 14, color: '#2C3E50' }}
                 />
-                <TouchableOpacity 
-                  className="absolute right-4"
-                  onPress={() => setShowPassword(!showPassword)}
-                >
-                  <Text className="text-wrenly-primary text-sm font-bold">{showPassword ? 'HIDE' : 'SHOW'}</Text>
+                <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={{ padding: 4 }}>
+                  <FontAwesome5 name={showPassword ? "eye-slash" : "eye"} size={16} color="#8A9BA8" />
                 </TouchableOpacity>
               </View>
-              {errors.password && <Text className="text-xs text-wrenly-danger mt-1">{errors.password}</Text>}
+              {errors.password && <Text style={{ fontSize: 12, color: '#FF4757', marginTop: 4 }}>{errors.password}</Text>}
             </View>
 
+            {/* Checkbox */}
             <Pressable
               onPress={() => { setParentalConsent(!parentalConsent); setErrors(e => ({ ...e, consent: undefined })); }}
-              className="flex-row items-start mt-2 mb-6"
+              style={{ backgroundColor: '#F2F6F6', padding: 16, borderRadius: 8, flexDirection: 'row', alignItems: 'flex-start', marginBottom: 24 }}
             >
-              <View className={`w-5 h-5 rounded border-2 items-center justify-center mr-3 mt-0.5 flex-shrink-0 ${parentalConsent ? 'bg-wrenly-primary border-wrenly-primary' : errors.consent ? 'border-wrenly-danger bg-wrenly-background' : 'border-wrenly-textSecondary bg-wrenly-background'}`}>
-                {parentalConsent && <Text className="text-wrenly-text text-xs font-bold leading-none">✓</Text>}
+              <View style={{ width: 18, height: 18, borderRadius: 4, borderWidth: 1.5, borderColor: parentalConsent ? '#00665E' : '#CBD5E1', backgroundColor: parentalConsent ? '#00665E' : '#FFFFFF', alignItems: 'center', justifyContent: 'center', marginRight: 12, marginTop: 2 }}>
+                {parentalConsent && <FontAwesome5 name="check" size={10} color="#FFFFFF" />}
               </View>
-              <View className="flex-1">
-                <Text className="text-sm text-wrenly-textSecondary leading-5">
-                  I have parental consent and agree to the <Text className="text-wrenly-primary underline">Privacy Policy and learning guidelines</Text>.
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 12, color: '#566B80', lineHeight: 18 }}>
+                  I confirm I have my parent/guardian's consent to access Wrenly AI. I agree to the <Text style={{ color: '#00665E', fontWeight: '700' }}>Privacy Policy</Text> and learning guidelines.
                 </Text>
-                {errors.consent && <Text className="text-xs text-wrenly-danger mt-1">{errors.consent}</Text>}
+                {errors.consent && <Text style={{ fontSize: 12, color: '#FF4757', marginTop: 4 }}>{errors.consent}</Text>}
               </View>
             </Pressable>
 
+            {/* Login Button */}
             <TouchableOpacity
               onPress={handleLogin}
               disabled={loading}
-              className={`h-[48px] rounded-[12px] bg-wrenly-primary items-center justify-center ${loading ? 'opacity-70' : ''}`}
+              style={{ height: 48, backgroundColor: '#00665E', borderRadius: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', opacity: loading ? 0.7 : 1, marginBottom: 24 }}
             >
-              <Text className="text-wrenly-text font-bold text-base">{loading ? 'Logging in...' : 'Login →'}</Text>
+              <Text style={{ color: '#FFFFFF', fontWeight: '700', fontSize: 15, marginRight: 8 }}>{loading ? 'Logging in...' : 'Login'}</Text>
+              {!loading && <Feather name="arrow-right" size={18} color="#FFFFFF" />}
             </TouchableOpacity>
+
+            {/* Teacher Login Link */}
+            <View style={{ borderTopWidth: 1, borderTopColor: '#F0F2F5', paddingTop: 20, paddingBottom: 4, alignItems: 'center' }}>
+              <TouchableOpacity onPress={() => router.push('/(auth)/teacher-login')} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <FontAwesome5 name="graduation-cap" size={14} color="#6A7A82" style={{ marginRight: 8 }} />
+                <Text style={{ fontSize: 12, color: '#6A7A82', fontWeight: '600' }}>Teacher Login</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Help text */}
+            <View style={{ marginTop: 24, alignItems: 'center' }}>
+              <Text style={{ fontSize: 12, color: '#8A9BA8' }}>
+                Need help? <Text style={{ color: '#00665E', fontWeight: '700' }}>Contact school IT</Text>
+              </Text>
+            </View>
           </View>
 
-          <TouchableOpacity
-            onPress={() => router.push('/(auth)/teacher-login')}
-            className="items-center py-4"
-          >
-            <Text className="text-sm text-wrenly-textSecondary">
-              Are you an educator? <Text className="text-wrenly-primary font-semibold">Teacher Login</Text>
-            </Text>
-          </TouchableOpacity>
+          {/* Bottom Icons */}
+          <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 16, marginTop: 'auto' }}>
+            <View style={{ width: 68, height: 68, backgroundColor: '#EBF1F2', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
+              <Ionicons name="sparkles" size={24} color="#8A9BA8" />
+            </View>
+            <View style={{ width: 68, height: 68, backgroundColor: '#EBF1F2', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
+              <MaterialCommunityIcons name="head-cog" size={26} color="#00665E" />
+            </View>
+            <View style={{ width: 68, height: 68, backgroundColor: '#EBF1F2', borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}>
+              <FontAwesome5 name="book-open" size={20} color="#8A9BA8" />
+            </View>
+          </View>
 
         </ScrollView>
       </KeyboardAvoidingView>
