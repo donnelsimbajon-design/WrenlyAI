@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { LessonRepository } from '@/modules/lessons/lesson.repository';
-import { useAuthStore } from '@/store/authStore';
+import { useAuth } from '@/modules/security/useAuth';
 
 const getSubjectStyles = (subject: string) => {
   if (!subject) return { bg: '#F4F6F9', color: '#566B80', icon: 'file-text' as any };
@@ -57,7 +57,7 @@ const LessonCard = React.memo(({ lesson }: { lesson: any }) => {
 });
 
 export default function LessonsScreen() {
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const [lessons, setLessons] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
