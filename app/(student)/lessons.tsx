@@ -1,25 +1,17 @@
-import React, { useState, useMemo } from 'react';
-import { View, Text, FlatList, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import React, { useState, useMemo, useEffect } from 'react';
+import { View, Text, FlatList, TouchableOpacity, TextInput, ScrollView, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
-
-// Mock data for presentation
-const MOCK_LESSONS = [
-  { id: '1', title: 'Fractions & Decimals', subject: 'Advanced Mathematics', progress: 100, isCompleted: true, duration: '45 mins' },
-  { id: '2', title: 'The Water Cycle', subject: 'Biology 101', progress: 65, isCompleted: false, duration: '30 mins' },
-  { id: '3', title: 'Introduction to Poetry', subject: 'Literature', progress: 15, isCompleted: false, duration: '60 mins' },
-  { id: '4', title: 'Mitosis vs Meiosis', subject: 'Biology 101', progress: 0, isCompleted: false, duration: '40 mins' },
-  { id: '5', title: 'Algebraic Expressions', subject: 'Advanced Mathematics', progress: 100, isCompleted: true, duration: '50 mins' },
-];
-
-const SUBJECTS = ['All Subjects', ...Array.from(new Set(MOCK_LESSONS.map(l => l.subject)))];
+import { LessonRepository } from '@/modules/lessons/lesson.repository';
+import { useAuthStore } from '@/store/authStore';
 
 const getSubjectStyles = (subject: string) => {
+  if (!subject) return { bg: '#F4F6F9', color: '#566B80', icon: 'file-text' as any };
   if (subject.includes('Math')) return { bg: '#E8F2FF', color: '#0066FF', icon: 'hash' as any };
-  if (subject.includes('Biology')) return { bg: '#E8F7F5', color: '#00A67E', icon: 'activity' as any };
-  if (subject.includes('Literature')) return { bg: '#FFF0F5', color: '#E01A59', icon: 'book' as any };
+  if (subject.includes('Biology') || subject.includes('Science')) return { bg: '#E8F7F5', color: '#00A67E', icon: 'activity' as any };
+  if (subject.includes('Literature') || subject.includes('English')) return { bg: '#FFF0F5', color: '#E01A59', icon: 'book' as any };
   return { bg: '#F4F6F9', color: '#566B80', icon: 'file-text' as any };
 };
 
@@ -65,12 +57,53 @@ const LessonCard = React.memo(({ lesson }: { lesson: any }) => {
 });
 
 export default function LessonsScreen() {
+  const { user } = useAuthStore();
+  const [lessons, setLessons] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'All' | 'In Progress' | 'Completed'>('All');
   const [activeSubject, setActiveSubject] = useState('All Subjects');
 
+  useEffect(() => {
+    async function fetchLessons() {
+      // Return early if the user hasn't logged in yet
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+      
+      try {
+        setLoading(true);
+        // Uses the real student ID to find their enrolled classes and lessons
+        const data = await LessonRepository.getLessonsForStudent(user.id);
+        
+        // Map the data to flatten the subject and add mock progress 
+        // (since we don't have a progress table yet)
+        const formattedLessons = data.map((item: any) => ({
+          ...item,
+          subject: item.classrooms?.subject || 'Unknown Subject',
+          progress: 0, // Default to 0 until we have a progress tracking table
+          isCompleted: false,
+        }));
+        
+        setLessons(formattedLessons);
+      } catch (error) {
+        console.error('Error fetching lessons:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchLessons();
+  }, [user]);
+
+  const subjects = useMemo(() => {
+    return ['All Subjects', ...Array.from(new Set(lessons.map(l => l.subject)))];
+  }, [lessons]);
+
   const filteredLessons = useMemo(() => {
-    return MOCK_LESSONS.filter(lesson => {
+    return lessons.filter(lesson => {
       const matchesSearch = lesson.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                             lesson.subject.toLowerCase().includes(searchQuery.toLowerCase());
       
@@ -83,7 +116,7 @@ export default function LessonsScreen() {
 
       return matchesSearch && matchesTab && matchesSubject;
     });
-  }, [searchQuery, activeTab, activeSubject]);
+  }, [lessons, searchQuery, activeTab, activeSubject]);
 
   const clearFilters = () => {
     setSearchQuery('');
@@ -98,7 +131,9 @@ export default function LessonsScreen() {
       </View>
       <Text style={{ fontSize: 18, fontWeight: '800', color: '#2C3E50', marginBottom: 8 }}>No lessons found</Text>
       <Text style={{ fontSize: 14, color: '#8A9BA8', textAlign: 'center', marginBottom: 24 }}>
-        Try adjusting your search or filters to find what you're looking for.
+        {lessons.length === 0 
+          ? "You don't have any lessons yet. Enroll in a class to see them here!" 
+          : "Try adjusting your search or filters to find what you're looking for."}
       </Text>
       {(searchQuery !== '' || activeTab !== 'All' || activeSubject !== 'All Subjects') && (
         <TouchableOpacity 
@@ -143,10 +178,10 @@ export default function LessonsScreen() {
         {/* Subject Pills */}
         <View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 24, paddingRight: 40 }}>
-            {SUBJECTS.map((subject) => (
+            {subjects.map((subject) => (
               <TouchableOpacity
                 key={subject}
-                onPress={() => setActiveSubject(subject)}
+                onPress={() => setActiveSubject(subject as string)}
                 style={{ 
                   paddingHorizontal: 16, 
                   paddingVertical: 8, 
@@ -162,7 +197,7 @@ export default function LessonsScreen() {
                   fontSize: 13, 
                   color: activeSubject === subject ? '#FFFFFF' : '#566B80' 
                 }}>
-                  {subject}
+                  {subject as string}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -185,14 +220,20 @@ export default function LessonsScreen() {
         </View>
       </View>
 
-      <FlatList
-        data={filteredLessons}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <LessonCard lesson={item} />}
-        contentContainerStyle={{ padding: 24, paddingTop: 0, paddingBottom: 100 }}
-        ListEmptyComponent={renderEmptyState}
-        showsVerticalScrollIndicator={false}
-      />
+      {loading ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color="#00665E" />
+        </View>
+      ) : (
+        <FlatList
+          data={filteredLessons}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <LessonCard lesson={item} />}
+          contentContainerStyle={{ padding: 24, paddingTop: 0, paddingBottom: 100 }}
+          ListEmptyComponent={renderEmptyState}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </SafeAreaView>
   );
 }
