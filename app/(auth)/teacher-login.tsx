@@ -44,7 +44,7 @@ export default function TeacherLoginScreen() {
         throw new Error('Students must use the Student Login portal.');
       }
 
-      router.replace('/(teacher)/dashboard');
+      router.replace('/(teacher)/upload');
     } catch (err: any) {
       Alert.alert('Login Failed', err.message);
     } finally {
