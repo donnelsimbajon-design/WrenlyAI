@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useAuthStore } from '@/store/authStore';
+import { useAuth } from '@/modules/security/useAuth';
 import { StudentDashboardRepository } from './studentDashboard.repository';
 import { useNetworkStatus } from '@/utils/network';
 
 export function useStudentDashboard() {
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const { isOnline } = useNetworkStatus();
   
   const [classrooms, setClassrooms] = useState<any[]>([]);

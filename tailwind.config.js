@@ -10,15 +10,16 @@ module.exports = {
     extend: {
       colors: {
         wrenly: {
-          background: '#0D0D0D',
-          surface: '#1A1A2E',
-          primary: '#00C896',
+          background: '#F5F7F9',
+          surface: '#FFFFFF',
+          surfaceSecondary: '#F1F4F5',
+          primary: '#006D5B',
           accent: '#6C63FF',
           warning: '#F5A623',
           danger: '#FF4757',
-          text: '#FFFFFF',
-          textSecondary: '#A0A0B0',
-          border: 'rgba(255,255,255,0.08)',
+          text: '#2C3E50',
+          textSecondary: '#7F8C8D',
+          border: '#E0E6ED',
         },
       },
       fontFamily: {

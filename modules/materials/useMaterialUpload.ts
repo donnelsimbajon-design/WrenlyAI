@@ -1,10 +1,10 @@
 import { useState, useCallback, useEffect } from 'react';
 import * as DocumentPicker from 'expo-document-picker';
-import { useAuthStore } from '@/store/authStore';
+import { useAuth } from '@/modules/security/useAuth';
 import { MaterialsRepository } from './materials.repository';
 
 export function useMaterialUpload(classroomId?: string) {
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [processingStatus, setProcessingStatus] = useState<string | null>(null);
