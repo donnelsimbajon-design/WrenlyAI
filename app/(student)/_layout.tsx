@@ -1,6 +1,8 @@
-import { Tabs } from 'expo-router';
+import { Tabs, router } from 'expo-router';
 import { View, Text } from 'react-native';
 import { Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useAuth } from '@/modules/security/useAuth';
+import { useEffect } from 'react';
 
 const TabBarIconWrapper = ({ focused, children }: { focused: boolean, children: React.ReactNode }) => {
   return (
@@ -18,6 +20,18 @@ const TabBarIconWrapper = ({ focused, children }: { focused: boolean, children: 
 };
 
 export default function StudentLayout() {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.replace('/(auth)/login');
+    }
+  }, [isAuthenticated, isLoading]);
+
+  if (isLoading || !isAuthenticated) {
+    return null;
+  }
+
   return (
     <Tabs
       screenOptions={{
@@ -96,9 +110,15 @@ export default function StudentLayout() {
       />
       <Tabs.Screen
         name="lesson/[id]"
-        options={{
-          href: null,
-        }}
+        options={{ href: null }}
+      />
+      <Tabs.Screen
+        name="join"
+        options={{ href: null }}
+      />
+      <Tabs.Screen
+        name="classroom/[id]"
+        options={{ href: null }}
       />
     </Tabs>
   );

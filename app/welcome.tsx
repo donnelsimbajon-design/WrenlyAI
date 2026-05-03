@@ -6,6 +6,7 @@ import {
   Animated,
   Easing,
   StatusBar,
+  Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -37,24 +38,25 @@ export default function WelcomeScreen() {
   const dotScale3 = useRef(new Animated.Value(1)).current;
 
   const [messageIndex, setMessageIndex] = useState(0);
+  const nativeDriver = Platform.OS !== 'web';
 
   useEffect(() => {
     // Sequence: logo pops in → title fades in → card slides up
     Animated.sequence([
       // Logo bounce in
       Animated.parallel([
-        Animated.spring(logoScale, { toValue: 1, useNativeDriver: true, damping: 10, stiffness: 120 }),
-        Animated.timing(logoOpacity, { toValue: 1, duration: 400, useNativeDriver: true }),
+        Animated.spring(logoScale, { toValue: 1, useNativeDriver: nativeDriver, damping: 10, stiffness: 120 }),
+        Animated.timing(logoOpacity, { toValue: 1, duration: 400, useNativeDriver: nativeDriver }),
       ]),
       // Title fade + slide
       Animated.parallel([
-        Animated.timing(titleOpacity, { toValue: 1, duration: 500, useNativeDriver: true }),
-        Animated.timing(titleTranslateY, { toValue: 0, duration: 500, easing: Easing.out(Easing.quad), useNativeDriver: true }),
+        Animated.timing(titleOpacity, { toValue: 1, duration: 500, useNativeDriver: nativeDriver }),
+        Animated.timing(titleTranslateY, { toValue: 0, duration: 500, easing: Easing.out(Easing.quad), useNativeDriver: nativeDriver }),
       ]),
       // Card fade + slide
       Animated.parallel([
-        Animated.timing(cardOpacity, { toValue: 1, duration: 500, useNativeDriver: true }),
-        Animated.timing(cardTranslateY, { toValue: 0, duration: 500, easing: Easing.out(Easing.quad), useNativeDriver: true }),
+        Animated.timing(cardOpacity, { toValue: 1, duration: 500, useNativeDriver: nativeDriver }),
+        Animated.timing(cardTranslateY, { toValue: 0, duration: 500, easing: Easing.out(Easing.quad), useNativeDriver: nativeDriver }),
       ]),
     ]).start();
 
@@ -64,8 +66,8 @@ export default function WelcomeScreen() {
         Animated.loop(
           Animated.sequence([
             Animated.delay(delay),
-            Animated.timing(dot, { toValue: 1.6, duration: 300, useNativeDriver: true }),
-            Animated.timing(dot, { toValue: 1, duration: 300, useNativeDriver: true }),
+            Animated.timing(dot, { toValue: 1.6, duration: 300, useNativeDriver: nativeDriver }),
+            Animated.timing(dot, { toValue: 1, duration: 300, useNativeDriver: nativeDriver }),
             Animated.delay(600),
           ])
         );

@@ -14,29 +14,49 @@ export function Input({ label, error, isPassword, leftIcon, style, ...props }: I
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const borderColor = error
+    ? theme.colors.wrenly.danger
+    : isFocused
+    ? theme.colors.wrenly.primary
+    : theme.colors.wrenly.border;
+
   return (
-    <View className="mb-5">
-      <Text className="text-wrenly-text text-[11px] font-bold tracking-widest uppercase mb-2 ml-1">
+    <View style={{ marginBottom: 18 }}>
+      <Text style={{
+        fontSize: 11,
+        fontWeight: 'bold',
+        letterSpacing: 1,
+        textTransform: 'uppercase',
+        color: theme.colors.wrenly.textSecondary,
+        marginBottom: 8,
+        marginLeft: 2,
+      }}>
         {label}
       </Text>
-      
-      <View
-        className={`flex-row items-center bg-wrenly-surface rounded-xl border ${
-          error
-            ? 'border-wrenly-danger'
-            : isFocused
-            ? 'border-wrenly-primary'
-            : 'border-wrenly-border'
-        } px-4 py-3.5`}
-      >
+
+      <View style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 14,
+        borderWidth: 1.5,
+        borderColor,
+        paddingHorizontal: 14,
+        paddingVertical: 12,
+      }}>
         {leftIcon && (
-          <View className="mr-3">
+          <View style={{ marginRight: 10 }}>
             {leftIcon}
           </View>
         )}
 
         <TextInput
-          className="flex-1 text-wrenly-text text-base"
+          style={[{
+            flex: 1,
+            fontSize: 15,
+            color: theme.colors.wrenly.text,
+            outlineStyle: 'none', // web fix
+          } as any, style]}
           placeholderTextColor={theme.colors.wrenly.textSecondary}
           onFocus={(e) => {
             setIsFocused(true);
@@ -47,15 +67,14 @@ export function Input({ label, error, isPassword, leftIcon, style, ...props }: I
             props.onBlur?.(e);
           }}
           secureTextEntry={isPassword && !showPassword}
-          style={[{ outlineStyle: 'none' } as any, style]} // Fix for web focus ring
           {...props}
         />
-        
+
         {isPassword && (
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={() => setShowPassword(!showPassword)}
-            className="ml-2"
+            style={{ marginLeft: 8 }}
           >
             <MaterialCommunityIcons
               name={showPassword ? 'eye-off' : 'eye'}
@@ -65,9 +84,15 @@ export function Input({ label, error, isPassword, leftIcon, style, ...props }: I
           </TouchableOpacity>
         )}
       </View>
-      
+
       {error && (
-        <Text className="text-wrenly-danger text-xs mt-1.5 ml-1 font-medium">
+        <Text style={{
+          color: theme.colors.wrenly.danger,
+          fontSize: 12,
+          marginTop: 6,
+          marginLeft: 2,
+          fontWeight: '500',
+        }}>
           {error}
         </Text>
       )}

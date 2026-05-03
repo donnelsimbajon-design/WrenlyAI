@@ -8,8 +8,7 @@ import {
   type TouchableOpacityProps,
   type ViewStyle,
 } from 'react-native';
-
-// ─── Types ────────────────────────────────────────────────────────────────────
+import { theme } from '@/config/theme';
 
 type ButtonVariant = 'primary' | 'outline' | 'ghost';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -23,38 +22,18 @@ interface ButtonProps extends Omit<TouchableOpacityProps, 'style'> {
   style?: StyleProp<ViewStyle>;
 }
 
-// ─── Style Maps ───────────────────────────────────────────────────────────────
-
-const containerVariant: Record<ButtonVariant, string> = {
-  primary: 'bg-wrenly-primary active:bg-navy-900',
-  outline: 'border border-wrenly-primary bg-transparent active:bg-navy-50',
-  ghost: 'bg-transparent active:opacity-60',
+const sizeStyles: Record<ButtonSize, { paddingHorizontal: number; paddingVertical: number; borderRadius: number }> = {
+  sm: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 10 },
+  md: { paddingHorizontal: 20, paddingVertical: 14, borderRadius: 14 },
+  lg: { paddingHorizontal: 28, paddingVertical: 16, borderRadius: 18 },
 };
 
-const textVariant: Record<ButtonVariant, string> = {
-  primary: 'text-white',
-  outline: 'text-wrenly-primary',
-  ghost: 'text-wrenly-primary',
+const textSizes: Record<ButtonSize, number> = {
+  sm: 13,
+  md: 15,
+  lg: 17,
 };
 
-const containerSize: Record<ButtonSize, string> = {
-  sm: 'px-4 py-2 rounded-lg',
-  md: 'px-6 py-3.5 rounded-xl',
-  lg: 'px-8 py-4 rounded-2xl',
-};
-
-const textSize: Record<ButtonSize, string> = {
-  sm: 'text-sm',
-  md: 'text-base',
-  lg: 'text-lg',
-};
-
-// ─── Component ────────────────────────────────────────────────────────────────
-
-/**
- * Reusable primary Button component for Wrenly AI.
- * Follows the shadcn aesthetic — clean, flat, accessible.
- */
 export function Button({
   label,
   variant = 'primary',
@@ -67,6 +46,24 @@ export function Button({
 }: ButtonProps) {
   const isDisabled = disabled || loading;
 
+  const containerStyle: ViewStyle = {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...sizeStyles[size],
+    opacity: isDisabled ? 0.5 : 1,
+    ...(variant === 'primary' && { backgroundColor: theme.colors.wrenly.primary }),
+    ...(variant === 'outline' && {
+      backgroundColor: 'transparent',
+      borderWidth: 1.5,
+      borderColor: theme.colors.wrenly.primary,
+    }),
+    ...(variant === 'ghost' && { backgroundColor: 'transparent' }),
+  };
+
+  const textColor =
+    variant === 'primary' ? '#FFFFFF' : theme.colors.wrenly.primary;
+
   return (
     <TouchableOpacity
       accessible
@@ -74,34 +71,27 @@ export function Button({
       accessibilityLabel={label}
       accessibilityState={{ disabled: isDisabled, busy: loading }}
       disabled={isDisabled}
-      className={`
-        flex-row items-center justify-center
-        ${containerVariant[variant]}
-        ${containerSize[size]}
-        ${isDisabled ? 'opacity-50' : 'opacity-100'}
-      `}
-      style={style}
+      style={[containerStyle, style]}
       activeOpacity={0.8}
       {...rest}
     >
-      {loading ? (
+      {loading && (
         <ActivityIndicator
           size="small"
-          color={variant === 'primary' ? '#FFFFFF' : '#1E3A8A'}
-          className="mr-2"
+          color={variant === 'primary' ? '#FFFFFF' : theme.colors.wrenly.primary}
+          style={{ marginRight: 8 }}
         />
-      ) : null}
-      <Text
-        className={`
-          font-semibold tracking-wide
-          ${textVariant[variant]}
-          ${textSize[size]}
-        `}
-      >
+      )}
+      <Text style={{
+        fontWeight: '700',
+        letterSpacing: 0.3,
+        fontSize: textSizes[size],
+        color: textColor,
+      }}>
         {label}
       </Text>
       {rightIcon && !loading && (
-        <View className="ml-2">
+        <View style={{ marginLeft: 8 }}>
           {rightIcon}
         </View>
       )}
