@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Modal, TextInput, ActivityIndicator, Alert, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { useAuthStore } from '@/store/authStore';
+import { useAuth } from '@/modules/security/useAuth';
 import { useStudentDashboard } from '@/modules/classroom/useStudentDashboard';
 import { OfflineBanner } from '@/components/ui/OfflineBanner';
 import { FontAwesome5, Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function StudentDashboard() {
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const isLoading = false;
   const isJoining = false;
   const joinClass = async (code: string): Promise<{ success: boolean; error?: string }> => ({ success: true });

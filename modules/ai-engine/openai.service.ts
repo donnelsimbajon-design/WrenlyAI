@@ -1,9 +1,10 @@
 import OpenAI from 'openai';
 
-// Ideally, this should be set in .env.local or handled via a backend proxy for security in a real app.
-const apiKey = process.env.EXPO_PUBLIC_OPENAI_API_KEY || 'sk-dummy-key-for-local-dev';
+// Using Google Gemini API compatible with OpenAI SDK
+const apiKey = process.env.Wrenly_ai_gemma_key || '';
 
 export const openaiClient = new OpenAI({
   apiKey,
-  dangerouslyAllowBrowser: true, // Needed for React Native/Expo, though a backend proxy is recommended
+  baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
+  dangerouslyAllowBrowser: true, // Needed for React Native/Expo
 });

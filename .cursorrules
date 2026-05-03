@@ -1,0 +1,62 @@
+# ═══════════════════════════════════════════════════════════════
+# WRENLY AI — CURSOR RULES (Auto-loaded by Cursor IDE)
+# Source of truth: /.ai-rules/*.md
+# ═══════════════════════════════════════════════════════════════
+
+# ── PROJECT CONTEXT ──────────────────────────────────────────
+# Wrenly AI is an offline-first, multilingual AI classroom app
+# for Philippine public schools targeting low-end Android devices
+# with limited/no internet access.
+#
+# Core Mandates:
+#   1. OFFLINE-FIRST: SQLite local storage, background cloud sync.
+#   2. VOCAL BRIDGE: TTS audio prioritized over text (low literacy).
+#   3. MULTILINGUAL: English, Tagalog, Bisaya only.
+#   4. CO-PILOT: AI assists teachers; human approval required.
+
+# ── TECH STACK ───────────────────────────────────────────────
+# Frontend:  React Native (Expo) + Expo Router (file-based)
+# Styling:   NativeWind v4 (Tailwind CSS) — no StyleSheet.create
+# Backend:   Supabase (Auth, PostgreSQL, Storage, Realtime)
+# Local DB:  expo-sqlite + AsyncStorage
+# State:     Zustand
+# AI:        OpenAI gpt-4o
+
+# ── STRICT CODING RULES ──────────────────────────────────────
+# 1. TypeScript ONLY. NEVER use `any`. All types go in types.ts.
+# 2. DUMB COMPONENTS: No business logic in .tsx files.
+#    Logic belongs in hooks (useFeature.ts) and services.
+# 3. REPOSITORY PATTERN: All Supabase calls go through
+#    repository files (e.g. AuthRepository.ts), NEVER in views.
+# 4. ERROR HANDLING: All async ops use try/catch with
+#    standardized error return objects.
+# 5. NativeWind className ONLY for styling — never inline styles.
+
+# ── UI RULES ─────────────────────────────────────────────────
+# - shadcn/ui aesthetic adapted for mobile: white bg, navy text,
+#   Fairy-Wren blue accents.
+# - Tap targets: minimum 44×44pt for accessibility.
+# - EVERY screen must display an "Offline Mode" indicator when
+#   the device has no network connection.
+# - Fonts must scale with device accessibility settings.
+
+# ── AI ENGINE RULES ──────────────────────────────────────────
+# - All OpenAI calls live in modules/ai-engine/ only.
+# - Force JSON structured outputs on every API call.
+# - Prompt templates live in PromptEngine.ts — NEVER in UI.
+# - System prompt must enforce: Philippine public school context,
+#   Grade 6 Lexile level, Bisaya key term translation.
+# - Chunk large content before sending to the API (cost control).
+
+# ── WORKFLOW ─────────────────────────────────────────────────
+# For every task: Analyze → Plan → Define Types → Backend →
+# Frontend → Review (check for `any` types, arch violations).
+
+# ── DEBUGGING ────────────────────────────────────────────────
+# On error: Isolate → Explain → Fix → Verify no regression.
+# If ambiguous: add console.log FIRST, then fix.
+
+# ── CURRENT STATE ────────────────────────────────────────────
+# Phase:  1 — Foundation & Login/Auth Setup
+# Target: Low-end Android, prepaid data plan
+# DO NOT build Phase 4 (Voice) or Phase 6 (Analytics) features yet.

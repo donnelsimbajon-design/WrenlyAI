@@ -1,5 +1,4 @@
 import 'react-native-url-polyfill/auto';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 import { Platform } from 'react-native';
 
@@ -15,25 +14,49 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 /**
  * SSR-safe storage adapter.
- * During server-side rendering (Expo Router web SSR), `window` is not defined
- * and AsyncStorage will crash. We use an in-memory no-op fallback for SSR,
- * and real AsyncStorage on the client side.
+ * - During SSR (window is undefined): returns no-op stubs so the server doesn't crash.
+ * - On native (iOS/Android): uses AsyncStorage.
+ * - On client-side web: uses localStorage directly (window IS defined).
  */
-const isSSR = typeof window === 'undefined';
+const isBrowser = typeof window !== 'undefined';
+const isNative = Platform.OS !== 'web';
 
-const ssrSafeStorage = isSSR
-  ? {
+const getStorage = () => {
+  // SSR environment — return no-op stubs
+  if (!isBrowser && !isNative) {
+    return {
       getItem: (_key: string) => Promise.resolve(null),
       setItem: (_key: string, _value: string) => Promise.resolve(),
       removeItem: (_key: string) => Promise.resolve(),
-    }
-  : AsyncStorage;
+    };
+  }
+
+  // Native (iOS / Android) — use AsyncStorage dynamically to avoid SSR issues
+  if (isNative) {
+    // Dynamic require so it is never evaluated during SSR
+    const AsyncStorage = require('@react-native-async-storage/async-storage').default;
+    return AsyncStorage;
+  }
+
+  // Client-side web — use localStorage (no SSR crash risk here)
+  return {
+    getItem: (key: string) => Promise.resolve(window.localStorage.getItem(key)),
+    setItem: (key: string, value: string) => {
+      window.localStorage.setItem(key, value);
+      return Promise.resolve();
+    },
+    removeItem: (key: string) => {
+      window.localStorage.removeItem(key);
+      return Promise.resolve();
+    },
+  };
+};
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    storage: ssrSafeStorage,
+    storage: getStorage(),
     autoRefreshToken: true,
-    persistSession: !isSSR,
+    persistSession: isBrowser || isNative,
     detectSessionInUrl: false,
   },
 });

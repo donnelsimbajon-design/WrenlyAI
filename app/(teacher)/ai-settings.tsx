@@ -3,12 +3,12 @@ import { View, Text, ScrollView, TouchableOpacity, Switch, ActivityIndicator } f
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useAISettings } from '@/modules/teacher/useAISettings';
-import { useAuthStore } from '@/store/authStore';
+import { useAuth } from '@/modules/security/useAuth';
 import { router } from 'expo-router';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function AISettingsScreen() {
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const { 
     settings, 
     updateSetting, 

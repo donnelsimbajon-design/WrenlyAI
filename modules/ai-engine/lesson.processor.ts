@@ -11,7 +11,7 @@ export class LessonProcessor {
     
     try {
       const response = await openaiClient.chat.completions.create({
-        model: 'gpt-4o', // Use GPT-4o as specified
+        model: 'gemini-1.5-flash',
         messages: [
           { role: 'system', content: 'You are a helpful assistant.' },
           { role: 'user', content: prompt }

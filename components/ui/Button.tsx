@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   Text,
   TouchableOpacity,
+  View,
   type StyleProp,
   type TouchableOpacityProps,
   type ViewStyle,
@@ -18,6 +19,7 @@ interface ButtonProps extends Omit<TouchableOpacityProps, 'style'> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
+  rightIcon?: React.ReactNode;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -58,6 +60,7 @@ export function Button({
   variant = 'primary',
   size = 'md',
   loading = false,
+  rightIcon,
   disabled,
   style,
   ...rest
@@ -97,6 +100,11 @@ export function Button({
       >
         {label}
       </Text>
+      {rightIcon && !loading && (
+        <View className="ml-2">
+          {rightIcon}
+        </View>
+      )}
     </TouchableOpacity>
   );
 }

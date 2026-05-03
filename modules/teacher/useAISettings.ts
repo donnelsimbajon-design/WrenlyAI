@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useAuthStore } from '@/store/authStore';
+import { useAuth } from '@/modules/security/useAuth';
 import { TeacherSettingsRepository, AISettings } from './teacherSettings.repository';
 import { Alert } from 'react-native';
 
 export function useAISettings() {
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const [settings, setSettings] = useState<AISettings>({
     target_grade_level: 7,
     auto_generate_quiz: true,

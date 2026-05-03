@@ -7,7 +7,7 @@ export class QuizGenerator {
     
     try {
       const response = await openaiClient.chat.completions.create({
-        model: 'gpt-4o',
+        model: 'gemini-1.5-flash',
         messages: [
           { role: 'system', content: 'You are a helpful assistant.' },
           { role: 'user', content: prompt }
