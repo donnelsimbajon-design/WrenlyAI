@@ -7,12 +7,12 @@ import { router } from 'expo-router';
 import { useAuthStore } from '@/store/authStore';
 
 export default function SettingsScreen() {
-  const { signOut } = useAuthStore();
+  const { logout } = useAuthStore();
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [darkModeEnabled, setDarkModeEnabled] = useState(false);
 
   const handleLogout = async () => {
-    await signOut();
+    await logout();
     router.replace('/(auth)/login');
   };
 

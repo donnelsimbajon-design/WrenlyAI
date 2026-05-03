@@ -11,7 +11,7 @@ export default function StudentDashboard() {
   const { user } = useAuthStore();
   const isLoading = false;
   const isJoining = false;
-  const joinClass = async (code: string) => ({ success: true });
+  const joinClass = async (code: string): Promise<{ success: boolean; error?: string }> => ({ success: true });
   
   const announcements = [
     { id: '1', title: 'Science Fair project submissions are due next Friday. Please finalize your topics!', created_at: new Date().toISOString() },

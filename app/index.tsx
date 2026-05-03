@@ -12,7 +12,7 @@ export default function Index() {
 
   // Redirect based on role
   if (user?.role === 'teacher') {
-    return <Redirect href="/(teacher)/dashboard" />;
+    return <Redirect href="/(teacher)/upload" />;
   } else {
     // Default to student dashboard
     return <Redirect href="/(student)/dashboard" />;
