@@ -1,11 +1,12 @@
 import '../global.css';
 
-import { useEffect } from 'react';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack, router } from 'expo-router';
+import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
 import 'react-native-reanimated';
 
+import { ToastContainer } from '@/components/ui/ToastContainer';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useAuth } from '@/modules/security/useAuth';
 
@@ -29,6 +30,7 @@ export default function RootLayout() {
         <Stack.Screen name="(teacher)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>
+      <ToastContainer />
       <StatusBar style="auto" />
     </ThemeProvider>
   );

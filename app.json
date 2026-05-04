@@ -9,7 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "We need camera access to scan QR codes and join classrooms",
+        "NSPhotoLibraryUsageDescription": "We need access to scan QR codes from your photo library"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -41,7 +45,13 @@
       ],
       "expo-web-browser",
       "expo-sqlite",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera to scan QR codes"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

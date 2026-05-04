@@ -1,20 +1,27 @@
+import { theme } from '@/config/theme';
+import { useToast } from '@/hooks/useToast';
+import { useClassroom } from '@/modules/classroom/useClassroom';
+import { useAuth } from '@/modules/security/useAuth';
+import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import {
-  View, Text, TouchableOpacity, TextInput,
-  ScrollView, ActivityIndicator, Alert, Clipboard,
-  KeyboardAvoidingView, Platform,
+    ActivityIndicator,
+    Clipboard,
+    KeyboardAvoidingView, Platform,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
-import { router } from 'expo-router';
-import { Feather } from '@expo/vector-icons';
-import { useAuth } from '@/modules/security/useAuth';
-import { useClassroom } from '@/modules/classroom/useClassroom';
-import { theme } from '@/config/theme';
 
 export default function CreateClassroomScreen() {
   const { user } = useAuth();
   const { createClassroom, isCreating } = useClassroom();
+  const toast = useToast();
 
   const [name, setName] = useState('');
   const [subject, setSubject] = useState('');
@@ -34,9 +41,10 @@ export default function CreateClassroomScreen() {
 
     const { classroom, error } = await createClassroom(name.trim(), subject.trim(), user!.id);
     if (error) {
-      Alert.alert('Error', error.message ?? 'Could not create classroom. Try again.');
+      toast.error(error.message ?? 'Could not create classroom. Try again.');
       return;
     }
+    toast.success('Classroom created!');
     setCreatedCode(classroom!.class_code);
     setCreatedName(classroom!.name);
   };
