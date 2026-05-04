@@ -1,5 +1,6 @@
 import { AnnouncementCard } from '@/components/AnnouncementCard';
 import { MemberAvatar } from '@/components/MemberAvatar';
+import { MaterialCard } from '@/components/MaterialCard';
 import { theme } from '@/config/theme';
 import { useChat } from '@/modules/chat/useChat';
 import { useClassroom } from '@/modules/classroom/useClassroom';
@@ -148,17 +149,31 @@ export default function TeacherClassroomDetail() {
             </View>
           </View>
 
-          <TouchableOpacity
-            onPress={() => setAnnModal(true)}
-            style={{
-              backgroundColor: theme.colors.wrenly.primary,
-              paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10,
-              flexDirection: 'row', alignItems: 'center',
-            }}
-          >
-            <Feather name="bell" size={14} color="#FFFFFF" style={{ marginRight: 6 }} />
-            <Text style={{ color: '#FFFFFF', fontWeight: '700', fontSize: 13 }}>Post</Text>
-          </TouchableOpacity>
+          {activeTab === 'Materials' ? (
+            <TouchableOpacity
+              onPress={() => router.push({ pathname: '/(teacher)/upload', params: { classroomId: id } })}
+              style={{
+                backgroundColor: theme.colors.wrenly.primary,
+                paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10,
+                flexDirection: 'row', alignItems: 'center',
+              }}
+            >
+              <Feather name="upload" size={14} color="#FFFFFF" style={{ marginRight: 6 }} />
+              <Text style={{ color: '#FFFFFF', fontWeight: '700', fontSize: 13 }}>Upload</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => setAnnModal(true)}
+              style={{
+                backgroundColor: theme.colors.wrenly.primary,
+                paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10,
+                flexDirection: 'row', alignItems: 'center',
+              }}
+            >
+              <Feather name="bell" size={14} color="#FFFFFF" style={{ marginRight: 6 }} />
+              <Text style={{ color: '#FFFFFF', fontWeight: '700', fontSize: 13 }}>Post</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Tab bar */}
@@ -215,20 +230,11 @@ export default function TeacherClassroomDetail() {
               </View>
             ) : (
               materials.map(m => (
-                <View key={m.id} style={{
-                  backgroundColor: '#FFFFFF', borderRadius: 14, padding: 14, marginBottom: 10,
-                  flexDirection: 'row', alignItems: 'center',
-                  borderWidth: 1, borderColor: '#F0F2F5',
-                  shadowColor: '#000', shadowOpacity: 0.03, shadowRadius: 6, elevation: 1,
-                }}>
-                  <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: '#F0FAF8', alignItems: 'center', justifyContent: 'center', marginRight: 12 }}>
-                    <Feather name="file" size={18} color={theme.colors.wrenly.primary} />
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 14, fontWeight: '700', color: '#1F2937' }} numberOfLines={1}>{m.title}</Text>
-                    <Text style={{ fontSize: 11, color: '#9CA3AF', marginTop: 2 }}>{m.file_type?.toUpperCase()} · {m.processing_status}</Text>
-                  </View>
-                </View>
+                <MaterialCard 
+                  key={m.id} 
+                  material={m} 
+                  onPress={() => router.push(`/(teacher)/material/${m.id}`)}
+                />
               ))
             )}
           </>

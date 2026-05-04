@@ -60,7 +60,7 @@ export default function SettingsScreen() {
         
         {/* ACCOUNT */}
         <SectionHeader title="ACCOUNT" />
-        <View style={{ backgroundColor: '#FFFFFF', borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: '#F0F2F5', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 1 }}>
+        <View style={{ backgroundColor: '#FFFFFF', borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: '#F0F2F5', }}>
           <SettingItem 
             icon={<Feather name="user" size={18} color="#566B80" />} 
             title="Profile Information" 
@@ -88,7 +88,7 @@ export default function SettingsScreen() {
 
         {/* PREFERENCES */}
         <SectionHeader title="PREFERENCES" />
-        <View style={{ backgroundColor: '#FFFFFF', borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: '#F0F2F5', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 1 }}>
+        <View style={{ backgroundColor: '#FFFFFF', borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: '#F0F2F5', }}>
           <SettingItem 
             icon={<Feather name="globe" size={18} color="#566B80" />} 
             title="Language" 
@@ -117,7 +117,7 @@ export default function SettingsScreen() {
 
         {/* SUPPORT */}
         <SectionHeader title="SUPPORT" />
-        <View style={{ backgroundColor: '#FFFFFF', borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: '#F0F2F5', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 1 }}>
+        <View style={{ backgroundColor: '#FFFFFF', borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: '#F0F2F5', }}>
           <SettingItem 
             icon={<Feather name="help-circle" size={18} color="#566B80" />} 
             title="Help Center" 
@@ -145,7 +145,7 @@ export default function SettingsScreen() {
         {/* Log Out Button */}
         <TouchableOpacity 
           onPress={handleLogout}
-          style={{ marginTop: 40, width: '100%', padding: 16, borderRadius: 12, borderWidth: 1, borderColor: '#FF4757', backgroundColor: '#FFFFFF', alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 1 }}
+          style={{ marginTop: 40, width: '100%', padding: 16, borderRadius: 12, borderWidth: 1, borderColor: '#FF4757', backgroundColor: '#FFFFFF', alignItems: 'center', }}
         >
           <Text style={{ color: '#FF4757', fontWeight: '800', fontSize: 15 }}>Log Out</Text>
         </TouchableOpacity>

@@ -43,11 +43,6 @@ export function ClassroomCard({ classroom, role, onPress }: ClassroomCardProps) 
         borderRadius: 20,
         marginBottom: 16,
         overflow: 'hidden',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.07,
-        shadowRadius: 14,
-        elevation: 3,
         borderWidth: 1,
         borderColor: '#F0F2F5',
       }}
@@ -78,7 +73,7 @@ export function ClassroomCard({ classroom, role, onPress }: ClassroomCardProps) 
             )}
             {role === 'student' && classroom.teacherName && (
               <Text style={{ fontSize: 11, color: '#9CA3AF', marginTop: 1 }}>
-                👤 {classroom.teacherName}
+                {classroom.teacherName}
               </Text>
             )}
           </View>

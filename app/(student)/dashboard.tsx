@@ -50,7 +50,7 @@ export default function StudentDashboard() {
               </View>
               <View>
                 <Text style={{ fontSize: 12, color: '#9CA3AF', fontWeight: '600' }}>
-                  {greeting} 👋
+                  {greeting}
                 </Text>
                 <Text style={{ fontSize: 16, fontWeight: '800', color: '#1F2937' }} numberOfLines={1}>
                   {studentName}
@@ -81,9 +81,7 @@ export default function StudentDashboard() {
               flexDirection: 'row', alignItems: 'center',
               marginBottom: 28,
               shadowColor: theme.colors.wrenly.primary,
-              shadowOffset: { width: 0, height: 8 },
-              shadowOpacity: 0.3, shadowRadius: 16, elevation: 6,
-            }}
+              }}
           >
             <View style={{
               width: 48, height: 48, borderRadius: 14,

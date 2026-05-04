@@ -154,9 +154,7 @@ export default function CreateClassroomScreen() {
                   flexDirection: 'row',
                   opacity: isCreating ? 0.7 : 1,
                   shadowColor: theme.colors.wrenly.primary,
-                  shadowOffset: { width: 0, height: 6 },
-                  shadowOpacity: 0.3, shadowRadius: 12, elevation: 4,
-                }}
+                  }}
               >
                 {isCreating ? (
                   <ActivityIndicator size="small" color="#FFFFFF" style={{ marginRight: 8 }} />

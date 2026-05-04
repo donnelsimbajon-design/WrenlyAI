@@ -101,10 +101,6 @@ export default function LoginScreen() {
             padding: 20,
             borderWidth: 1,
             borderColor: '#EFEFEF',
-            shadowColor: '#000',
-            shadowOpacity: 0.06,
-            shadowRadius: 12,
-            elevation: 3,
             marginBottom: 16,
           }}>
 

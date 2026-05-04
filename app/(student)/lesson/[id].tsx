@@ -95,7 +95,7 @@ export default function LessonScreen() {
             <TouchableOpacity
               key={lang}
               onPress={() => toggleLanguage(lang)}
-              style={{ flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 100, backgroundColor: language === lang ? '#FFFFFF' : 'transparent', shadowColor: language === lang ? '#000' : 'transparent', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: language === lang ? 1 : 0 }}
+              style={{ flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 100, backgroundColor: language === lang ? '#FFFFFF' : 'transparent', shadowColor: language === lang ? '#000' : 'transparent', elevation: language === lang ? 1 : 0 }}
             >
               <Text style={{ fontSize: 14, fontWeight: '700', color: language === lang ? '#00665E' : '#8A9BA8' }}>
                 {lang === 'en' ? 'English' : lang === 'tl' ? 'Tagalog' : 'Bisaya'}
@@ -105,7 +105,7 @@ export default function LessonScreen() {
         </View>
 
         {/* Lesson Thumbnail/Image */}
-        <View style={{ width: '100%', height: 192, backgroundColor: '#FFFFFF', borderRadius: 16, borderWidth: 1, borderColor: '#F0F2F5', alignItems: 'center', justifyContent: 'center', marginBottom: 24, overflow: 'hidden', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 12, elevation: 2 }}>
+        <View style={{ width: '100%', height: 192, backgroundColor: '#FFFFFF', borderRadius: 16, borderWidth: 1, borderColor: '#F0F2F5', alignItems: 'center', justifyContent: 'center', marginBottom: 24, overflow: 'hidden', }}>
           {lesson.materials?.storage_path ? (
             <Text style={{ color: '#8A9BA8' }}>Image attached</Text>
           ) : (
@@ -114,7 +114,7 @@ export default function LessonScreen() {
         </View>
 
         {/* AI-Simplified Lesson Content */}
-        <View style={{ backgroundColor: '#FFFFFF', padding: 24, borderRadius: 16, borderWidth: 1, borderColor: '#F0F2F5', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 12, elevation: 2 }}>
+        <View style={{ backgroundColor: '#FFFFFF', padding: 24, borderRadius: 16, borderWidth: 1, borderColor: '#F0F2F5', }}>
           <Text style={{ fontSize: 16, lineHeight: 28 }}>
             {content ? renderBoldText(content) : <Text style={{ color: '#8A9BA8', fontStyle: 'italic' }}>Content not generated for this language yet.</Text>}
           </Text>
@@ -122,7 +122,7 @@ export default function LessonScreen() {
       </ScrollView>
 
       {/* Audio Player Bar */}
-      <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#F0F2F5', padding: 24, paddingBottom: 40, shadowColor: '#000', shadowOffset: { width: 0, height: -4 }, shadowOpacity: 0.05, shadowRadius: 12, elevation: 10 }}>
+      <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopColor: '#F0F2F5', padding: 24, paddingBottom: 40, }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity 
             onPress={togglePlay}

@@ -1,7 +1,7 @@
-import { useAuth } from '@/modules/security/useAuth';
+import { useState, useCallback, useEffect } from 'react';
 import * as DocumentPicker from 'expo-document-picker';
-import { useCallback, useEffect, useState } from 'react';
-import { MaterialsRepository } from './materials.repository';
+import { useAuth } from '@/modules/security/useAuth';
+import { MaterialsService } from './materials.service';
 
 export function useMaterialUpload(classroomId?: string) {
   const { user } = useAuth();
@@ -13,7 +13,7 @@ export function useMaterialUpload(classroomId?: string) {
   const fetchRecent = useCallback(async () => {
     if (!user?.id) return;
     try {
-      const materials = await MaterialsRepository.getRecentMaterials(user.id);
+      const materials = await MaterialsService.getRecentMaterials(user.id);
       setRecentMaterials(materials);
     } catch (err) {
       console.error('Failed to fetch materials', err);
@@ -58,12 +58,7 @@ export function useMaterialUpload(classroomId?: string) {
       const path = `${user.id}/${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
       
       // Upload to Storage
-      try {
-        await MaterialsRepository.uploadFileToStorage(file, path);
-      } catch (uploadErr: any) {
-        console.error('Storage upload failed:', uploadErr);
-        throw new Error(`File upload failed: ${uploadErr.message}`);
-      }
+      await MaterialsService.uploadFileToStorage(file, path);
       
       setUploadProgress(50);
       setProcessingStatus('Extracting text and analyzing content...');
@@ -71,7 +66,7 @@ export function useMaterialUpload(classroomId?: string) {
       const materialType = ext === 'mp4' ? 'mp4' : ext === 'pptx' || ext === 'ppt' ? 'pptx' : ext === 'docx' || ext === 'doc' ? 'docx' : 'pdf';
       
       // For now we allow null classroom_id until a class is selected
-      const material = await MaterialsRepository.createMaterialRecord({
+      await MaterialsService.createMaterialRecord({
         classroom_id: classroomId || null,
         teacher_id: user.id,
         title: file.name,
@@ -82,36 +77,23 @@ export function useMaterialUpload(classroomId?: string) {
 
       setUploadProgress(70);
       
-      // Simulate backend AI trigger taking time, then mark as done
-      const updateStatusAfterDelay = async () => {
-        try {
-          await MaterialsRepository.updateMaterialStatus(material.id, 'done');
-          console.log('Material status updated to done:', material.id);
-          setUploadProgress(100);
-          setProcessingStatus('Done! Lesson structure prepared.');
-          // Refresh materials list to show updated status
-          await new Promise(resolve => setTimeout(resolve, 500));
-          await fetchRecent();
-        } catch (err) {
-          console.error('Failed to update material status:', err);
-        }
-      };
-
-      setTimeout(updateStatusAfterDelay, 2500);
-
-      // Also set up a cleanup timeout to reset UI
+      // Simulate backend AI trigger taking time
       setTimeout(() => {
-        setIsUploading(false);
-        setProcessingStatus(null);
-        setUploadProgress(0);
-      }, 6000);
+        setUploadProgress(100);
+        setProcessingStatus('Done! Lesson structure prepared.');
+        fetchRecent();
+        setTimeout(() => {
+          setIsUploading(false);
+          setProcessingStatus(null);
+          setUploadProgress(0);
+        }, 3000);
+      }, 2500);
 
       return { success: true };
     } catch (err: any) {
       setIsUploading(false);
       setProcessingStatus(null);
-      console.error('Upload error:', err);
-      return { error: err.message || 'Upload failed. Please check your connection and try again.' };
+      return { error: err.message };
     }
   };
 
