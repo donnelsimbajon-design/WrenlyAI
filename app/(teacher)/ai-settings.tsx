@@ -68,7 +68,7 @@ export default function AISettingsScreen() {
               <TouchableOpacity
                 key={level}
                 onPress={() => updateSetting('target_grade_level', level)}
-                style={{ flex: 1, paddingVertical: 12, alignItems: 'center', borderRadius: 100, backgroundColor: settings.target_grade_level === level ? '#FFFFFF' : 'transparent', shadowColor: settings.target_grade_level === level ? '#000' : 'transparent', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: settings.target_grade_level === level ? 1 : 0 }}
+                style={{ flex: 1, paddingVertical: 12, alignItems: 'center', borderRadius: 100, backgroundColor: settings.target_grade_level === level ? '#FFFFFF' : 'transparent', shadowColor: settings.target_grade_level === level ? '#000' : 'transparent', elevation: settings.target_grade_level === level ? 1 : 0 }}
               >
                 <Text style={{ fontWeight: '700', fontSize: 14, color: settings.target_grade_level === level ? '#00665E' : '#8A9BA8' }}>
                   Grade {level}
@@ -82,7 +82,7 @@ export default function AISettingsScreen() {
         </View>
 
         {/* Quizzes */}
-        <View style={{ backgroundColor: '#FFFFFF', padding: 20, borderRadius: 16, borderWidth: 1, borderColor: '#F0F2F5', marginBottom: 24, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 1 }}>
+        <View style={{ backgroundColor: '#FFFFFF', padding: 20, borderRadius: 16, borderWidth: 1, borderColor: '#F0F2F5', marginBottom: 24, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
           <View style={{ flex: 1, paddingRight: 16 }}>
             <Text style={{ color: '#2C3E50', fontWeight: '800', fontSize: 16, marginBottom: 4 }}>
               Auto-generate Quizzes
@@ -117,7 +117,7 @@ export default function AISettingsScreen() {
             />
           </View>
           
-          <View style={{ backgroundColor: '#FFFFFF', padding: 20, borderBottomLeftRadius: 16, borderBottomRightRadius: 16, borderWidth: 1, borderColor: '#F0F2F5', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 1 }}>
+          <View style={{ backgroundColor: '#FFFFFF', padding: 20, borderBottomLeftRadius: 16, borderBottomRightRadius: 16, borderWidth: 1, borderColor: '#F0F2F5', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
             <View style={{ flex: 1, paddingRight: 16 }}>
               <Text style={{ color: '#2C3E50', fontWeight: '700', fontSize: 15 }}>Enable Bisaya Dialect</Text>
             </View>
@@ -162,14 +162,14 @@ export default function AISettingsScreen() {
           <TouchableOpacity 
             onPress={discardChanges}
             disabled={isSaving}
-            style={{ flex: 1, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E2E8F0', paddingVertical: 16, borderRadius: 12, alignItems: 'center', marginRight: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1 }}
+            style={{ flex: 1, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E2E8F0', paddingVertical: 16, borderRadius: 12, alignItems: 'center', marginRight: 8, }}
           >
             <Text style={{ color: '#566B80', fontWeight: '800', fontSize: 16 }}>Discard</Text>
           </TouchableOpacity>
           <TouchableOpacity 
             onPress={saveSettings}
             disabled={isSaving}
-            style={{ flex: 1, backgroundColor: '#00665E', paddingVertical: 16, borderRadius: 12, alignItems: 'center', marginLeft: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 8, elevation: 3, opacity: isSaving ? 0.7 : 1 }}
+            style={{ flex: 1, backgroundColor: '#00665E', paddingVertical: 16, borderRadius: 12, alignItems: 'center', marginLeft: 8, opacity: isSaving ? 0.7 : 1 }}
           >
             <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 16 }}>
               {isSaving ? 'Saving...' : 'Save AI'}

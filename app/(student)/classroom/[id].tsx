@@ -9,6 +9,7 @@ import { Feather, Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/modules/security/useAuth';
 import { useClassroom } from '@/modules/classroom/useClassroom';
 import { AnnouncementCard } from '@/components/AnnouncementCard';
+import { LessonCard } from '@/components/LessonCard';
 import { theme } from '@/config/theme';
 
 type Tab = 'Lessons' | 'Chat' | 'Announcements';
@@ -18,8 +19,8 @@ export default function StudentClassroomDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { user } = useAuth();
   const {
-    currentClassroom, announcements, materials, isLoading,
-    fetchClassroom, fetchAnnouncements, fetchMaterials,
+    currentClassroom, announcements, materials, lessons, isLoading,
+    fetchClassroom, fetchAnnouncements, fetchMaterials, fetchLessons,
   } = useClassroom();
 
   const [activeTab, setActiveTab] = useState<Tab>('Lessons');
@@ -29,6 +30,7 @@ export default function StudentClassroomDetail() {
     fetchClassroom(id);
     fetchAnnouncements(id);
     fetchMaterials(id);
+    fetchLessons(id);
   }, [id]);
 
   if (isLoading && !currentClassroom) {
@@ -63,7 +65,7 @@ export default function StudentClassroomDetail() {
             </Text>
             {cls?.teacherName && (
               <Text style={{ fontSize: 12, color: '#9CA3AF', marginTop: 2 }}>
-                👤 {cls.teacherName}
+                {cls.teacherName}
               </Text>
             )}
           </View>
@@ -98,7 +100,7 @@ export default function StudentClassroomDetail() {
 
         {activeTab === 'Lessons' && (
           <>
-            {materials.length === 0 ? (
+            {lessons.length === 0 ? (
               <View style={{ alignItems: 'center', paddingTop: 40 }}>
                 <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: '#F0FAF8', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
                   <Feather name="book-open" size={28} color={theme.colors.wrenly.primary} />
@@ -111,25 +113,14 @@ export default function StudentClassroomDetail() {
                 </Text>
               </View>
             ) : (
-              materials.map((m) => (
-                <TouchableOpacity
-                  key={m.id}
-                  style={{
-                    backgroundColor: '#FFFFFF', borderRadius: 14, padding: 14, marginBottom: 10,
-                    flexDirection: 'row', alignItems: 'center',
-                    borderWidth: 1, borderColor: '#F0F2F5',
-                    shadowColor: '#000', shadowOpacity: 0.03, shadowRadius: 6, elevation: 1,
-                  }}
-                >
-                  <View style={{ width: 44, height: 44, borderRadius: 12, backgroundColor: '#F0FAF8', alignItems: 'center', justifyContent: 'center', marginRight: 14 }}>
-                    <Feather name="book" size={20} color={theme.colors.wrenly.primary} />
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 14, fontWeight: '700', color: '#1F2937' }} numberOfLines={1}>{m.title}</Text>
-                    <Text style={{ fontSize: 11, color: '#9CA3AF', marginTop: 2 }}>{m.file_type?.toUpperCase()}</Text>
-                  </View>
-                  <Feather name="chevron-right" size={18} color="#C7D0DA" />
-                </TouchableOpacity>
+              lessons
+                .map((lesson) => (
+                  <LessonCard 
+                    key={lesson.id}
+                    title={lesson.title}
+                    languages={['EN', 'TL', 'CEB']}
+                    onPress={() => router.push(`/(student)/lesson/${lesson.id}`)}
+                  />
               ))
             )}
           </>

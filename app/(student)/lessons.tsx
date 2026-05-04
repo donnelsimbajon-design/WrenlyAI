@@ -21,7 +21,7 @@ const LessonCard = React.memo(({ lesson }: { lesson: any }) => {
   return (
     <TouchableOpacity 
       onPress={() => router.push(`/lesson/${lesson.id}`)}
-      style={{ backgroundColor: '#FFFFFF', borderRadius: 16, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#F0F2F5', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 12, elevation: 2, flexDirection: 'row', alignItems: 'center' }}
+      style={{ backgroundColor: '#FFFFFF', borderRadius: 16, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#F0F2F5', flexDirection: 'row', alignItems: 'center' }}
     >
       {/* Thumbnail */}
       <View style={{ width: 56, height: 56, borderRadius: 14, backgroundColor: styles.bg, alignItems: 'center', justifyContent: 'center', marginRight: 16 }}>
@@ -212,7 +212,7 @@ export default function LessonsScreen() {
             <TouchableOpacity 
               key={tab}
               onPress={() => setActiveTab(tab as any)}
-              style={{ flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 100, backgroundColor: activeTab === tab ? '#FFFFFF' : 'transparent', shadowColor: activeTab === tab ? '#000' : 'transparent', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: activeTab === tab ? 2 : 0 }}
+              style={{ flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 100, backgroundColor: activeTab === tab ? '#FFFFFF' : 'transparent', shadowColor: activeTab === tab ? '#000' : 'transparent', elevation: activeTab === tab ? 2 : 0 }}
             >
               <Text style={{ fontWeight: '700', fontSize: 13, color: activeTab === tab ? '#00665E' : '#566B80' }}>{tab}</Text>
             </TouchableOpacity>

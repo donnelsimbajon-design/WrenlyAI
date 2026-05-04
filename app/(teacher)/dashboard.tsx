@@ -54,7 +54,7 @@ export default function TeacherDashboard() {
               </View>
               <View>
                 <Text style={{ fontSize: 12, color: '#9CA3AF', fontWeight: '600' }}>
-                  {greeting} 👋
+                  {greeting}
                 </Text>
                 <Text style={{ fontSize: 16, fontWeight: '800', color: '#1F2937' }} numberOfLines={1}>
                   {teacherName}
@@ -103,8 +103,7 @@ export default function TeacherDashboard() {
             flex: 1, backgroundColor: '#FFFFFF',
             borderRadius: 16, padding: 16,
             borderWidth: 1, borderColor: '#F0F2F5',
-            shadowColor: '#000', shadowOpacity: 0.04, shadowRadius: 8, elevation: 1,
-          }}>
+            }}>
             <Text style={{ fontSize: 28, fontWeight: '900', color: '#1F2937' }}>
               {totalStudents}
             </Text>
@@ -187,8 +186,7 @@ export default function TeacherDashboard() {
                 style={{
                   flex: 1, backgroundColor: '#FFFFFF', borderRadius: 14, padding: 16,
                   alignItems: 'center', borderWidth: 1, borderColor: '#F0F2F5',
-                  shadowColor: '#000', shadowOpacity: 0.04, shadowRadius: 8, elevation: 1,
-                }}
+                  }}
               >
                 <Feather name="upload-cloud" size={22} color={theme.colors.wrenly.primary} />
                 <Text style={{ fontSize: 12, fontWeight: '700', color: '#374151', marginTop: 8 }}>
@@ -200,8 +198,7 @@ export default function TeacherDashboard() {
                 style={{
                   flex: 1, backgroundColor: '#FFFFFF', borderRadius: 14, padding: 16,
                   alignItems: 'center', borderWidth: 1, borderColor: '#F0F2F5',
-                  shadowColor: '#000', shadowOpacity: 0.04, shadowRadius: 8, elevation: 1,
-                }}
+                  }}
               >
                 <Feather name="settings" size={22} color={theme.colors.wrenly.primary} />
                 <Text style={{ fontSize: 12, fontWeight: '700', color: '#374151', marginTop: 8 }}>
@@ -222,9 +219,7 @@ export default function TeacherDashboard() {
           backgroundColor: theme.colors.wrenly.primary,
           alignItems: 'center', justifyContent: 'center',
           shadowColor: theme.colors.wrenly.primary,
-          shadowOffset: { width: 0, height: 8 },
-          shadowOpacity: 0.4, shadowRadius: 16, elevation: 8,
-        }}
+          }}
       >
         <Feather name="plus" size={26} color="#FFFFFF" />
       </TouchableOpacity>

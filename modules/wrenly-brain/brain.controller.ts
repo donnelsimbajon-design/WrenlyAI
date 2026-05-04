@@ -27,7 +27,7 @@ export class BrainController {
 
     try {
       const response = await openaiClient.chat.completions.create({
-        model: 'gpt-4o',
+        model: 'gemini-2.5-flash',
         messages,
         temperature: 0.7,
       });
@@ -46,6 +46,37 @@ export class BrainController {
   }
 
   /**
+   * Handles general chat messages for the global Wrenly assistant.
+   */
+  static async globalChat(
+    studentId: string,
+    message: string,
+    history: any[]
+  ): Promise<string> {
+    const messages: any[] = [
+      { role: 'system', content: 'You are Wrenly, a friendly, encouraging, and helpful AI learning assistant for students. Explain concepts simply and clearly. Use modern, engaging language.' },
+      ...history.map(msg => ({
+        role: msg.role === 'user' ? 'user' : 'assistant',
+        content: msg.content
+      })),
+      { role: 'user', content: message }
+    ];
+
+    try {
+      const response = await openaiClient.chat.completions.create({
+        model: 'gemini-2.5-flash',
+        messages,
+        temperature: 0.7,
+      });
+
+      return response.choices[0]?.message?.content || 'I am not sure how to answer that right now.';
+    } catch (error) {
+      console.error('BrainController globalChat error:', error);
+      throw new Error('Wrenly is having trouble thinking right now. Please try again.');
+    }
+  }
+
+  /**
    * Generates a quick insight for a teacher's analytics dashboard.
    */
   static async getTeacherInsight(classPerformance: any): Promise<string> {
@@ -53,7 +84,7 @@ export class BrainController {
     
     try {
       const response = await openaiClient.chat.completions.create({
-        model: 'gpt-4o',
+        model: 'gemini-2.5-flash',
         messages: [
           { role: 'system', content: 'You are a helpful assistant.' },
           { role: 'user', content: prompt }

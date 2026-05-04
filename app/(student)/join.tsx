@@ -163,8 +163,6 @@ export default function JoinClassroomScreen() {
                   flexDirection: 'row',
                   opacity: (!isComplete || isJoining) ? 0.5 : 1,
                   shadowColor: theme.colors.wrenly.primary,
-                  shadowOffset: { width: 0, height: 6 },
-                  shadowOpacity: 0.3, shadowRadius: 12, elevation: 4,
                   marginTop: 8,
                 }}
               >
@@ -193,7 +191,7 @@ export default function JoinClassroomScreen() {
                 <Feather name="check" size={40} color="#059669" />
               </View>
               <Text style={{ fontSize: 26, fontWeight: '900', color: '#1F2937', textAlign: 'center', marginBottom: 12 }}>
-                You're in! 🎉
+                You're in!
               </Text>
               <Text style={{ fontSize: 15, color: '#6B7280', textAlign: 'center' }}>
                 Successfully joined{'\n'}

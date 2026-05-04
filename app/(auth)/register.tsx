@@ -166,7 +166,6 @@ export default function RegisterScreen() {
             width: '100%', maxWidth: 440,
             backgroundColor: '#FFFFFF', borderRadius: 24, padding: 20,
             borderWidth: 1, borderColor: '#EFEFEF',
-            shadowColor: '#000', shadowOpacity: 0.06, shadowRadius: 12, elevation: 3,
             marginBottom: 16
           }}>
 

@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import * as DocumentPicker from 'expo-document-picker';
 import { useAuth } from '@/modules/security/useAuth';
-import { MaterialsRepository } from './materials.repository';
+import { MaterialsService } from './materials.service';
 
 export function useMaterialUpload(classroomId?: string) {
   const { user } = useAuth();
@@ -13,7 +13,7 @@ export function useMaterialUpload(classroomId?: string) {
   const fetchRecent = useCallback(async () => {
     if (!user?.id) return;
     try {
-      const materials = await MaterialsRepository.getRecentMaterials(user.id);
+      const materials = await MaterialsService.getRecentMaterials(user.id);
       setRecentMaterials(materials);
     } catch (err) {
       console.error('Failed to fetch materials', err);
@@ -58,7 +58,7 @@ export function useMaterialUpload(classroomId?: string) {
       const path = `${user.id}/${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
       
       // Upload to Storage
-      await MaterialsRepository.uploadFileToStorage(file, path);
+      await MaterialsService.uploadFileToStorage(file, path);
       
       setUploadProgress(50);
       setProcessingStatus('Extracting text and analyzing content...');
@@ -66,7 +66,7 @@ export function useMaterialUpload(classroomId?: string) {
       const materialType = ext === 'mp4' ? 'mp4' : ext === 'pptx' || ext === 'ppt' ? 'pptx' : ext === 'docx' || ext === 'doc' ? 'docx' : 'pdf';
       
       // For now we allow null classroom_id until a class is selected
-      await MaterialsRepository.createMaterialRecord({
+      await MaterialsService.createMaterialRecord({
         classroom_id: classroomId || null,
         teacher_id: user.id,
         title: file.name,

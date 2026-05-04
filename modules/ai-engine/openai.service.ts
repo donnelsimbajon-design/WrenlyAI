@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 
 // Using Google Gemini API compatible with OpenAI SDK
-const apiKey = process.env.Wrenly_ai_gemma_key || '';
+const apiKey = process.env.EXPO_PUBLIC_WRENLY_AI_GEMMA_KEY || '';
 
 export const openaiClient = new OpenAI({
   apiKey,

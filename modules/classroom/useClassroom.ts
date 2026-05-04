@@ -10,6 +10,7 @@ interface ClassroomState {
   members: ClassroomMember[];
   announcements: Announcement[];
   materials: Material[];
+  lessons: any[];
   isLoading: boolean;
   isCreating: boolean;
   isJoining: boolean;
@@ -21,6 +22,7 @@ interface ClassroomState {
   fetchMembers: (classroomId: string) => Promise<void>;
   fetchAnnouncements: (classroomId: string) => Promise<void>;
   fetchMaterials: (classroomId: string) => Promise<void>;
+  fetchLessons: (classroomId: string) => Promise<void>;
   createClassroom: (name: string, subject: string, teacherId: string) => Promise<{ classroom: Classroom | null; error: any }>;
   joinClassroom: (code: string, studentId: string) => Promise<{ classroom: Classroom | null; error: any }>;
   postAnnouncement: (classroomId: string, teacherId: string, title: string, body: string) => Promise<{ error: any }>;
@@ -36,6 +38,7 @@ export const useClassroom = create<ClassroomState>((set, get) => ({
   members: [],
   announcements: [],
   materials: [],
+  lessons: [],
   isLoading: false,
   isCreating: false,
   isJoining: false,
@@ -81,6 +84,17 @@ export const useClassroom = create<ClassroomState>((set, get) => ({
     set({ materials });
   },
 
+  fetchLessons: async (classroomId) => {
+    try {
+      // Use the repository that is already implemented for lessons
+      const { LessonRepository } = await import('@/modules/lessons/lesson.repository');
+      const lessons = await LessonRepository.getLessonsByClassroom(classroomId);
+      set({ lessons: lessons || [] });
+    } catch (err) {
+      console.error('Failed to fetch classroom lessons', err);
+    }
+  },
+
   createClassroom: async (name, subject, teacherId) => {
     set({ isCreating: true, error: null });
     try {
@@ -124,5 +138,5 @@ export const useClassroom = create<ClassroomState>((set, get) => ({
   },
 
   clearError: () => set({ error: null }),
-  clearCurrent: () => set({ currentClassroom: null, members: [], announcements: [], materials: [] }),
+  clearCurrent: () => set({ currentClassroom: null, members: [], announcements: [], materials: [], lessons: [] }),
 }));

@@ -27,12 +27,7 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
       marginBottom: 12,
       borderWidth: 1,
       borderColor: '#E8F4F1',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.04,
-      shadowRadius: 8,
-      elevation: 1,
-    }}>
+      }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
         <View style={{
