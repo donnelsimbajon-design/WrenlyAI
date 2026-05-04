@@ -1,10 +1,11 @@
-import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
-import { useMaterialUpload } from '@/modules/materials/useMaterialUpload';
 import { OfflineBanner } from '@/components/ui/OfflineBanner';
-import { FontAwesome5, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useMaterialUpload } from '@/modules/materials/useMaterialUpload';
+import { Feather, FontAwesome5 } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import React from 'react';
+import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function TeacherUploadScreen() {
   const { isUploading, uploadProgress, processingStatus, recentMaterials, pickAndUpload } = useMaterialUpload();
@@ -30,6 +31,24 @@ export default function TeacherUploadScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: '#FAFAFA' }} edges={['top']}>
       <StatusBar style="dark" />
       <OfflineBanner />
+
+      {/* Top Navigation Bar */}
+      <View style={{
+        flexDirection: 'row', alignItems: 'center',
+        paddingHorizontal: 20, paddingVertical: 16,
+        backgroundColor: '#FFFFFF',
+        borderBottomWidth: 1, borderBottomColor: '#F0F2F5',
+      }}>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: '#F3F4F6', alignItems: 'center', justifyContent: 'center', marginRight: 12 }}
+        >
+          <Feather name="arrow-left" size={18} color="#374151" />
+        </TouchableOpacity>
+        <Text style={{ fontSize: 17, fontWeight: '800', color: '#1F2937' }}>
+          Upload Materials
+        </Text>
+      </View>
 
       <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 100 }}>
         
@@ -89,7 +108,11 @@ export default function TeacherUploadScreen() {
             </View>
           ) : (
             recentMaterials.map((mat) => (
-              <View key={mat.id} style={{ backgroundColor: '#FFFFFF', padding: 16, borderRadius: 16, borderWidth: 1, borderColor: '#F0F2F5', marginBottom: 12, flexDirection: 'row', alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 1 }}>
+              <TouchableOpacity 
+                key={mat.id} 
+                onPress={() => router.push(`/(teacher)/classroom/${mat.classroom_id ? mat.classroom_id : `select?materialId=${mat.id}`}`)} 
+                style={{ backgroundColor: '#FFFFFF', padding: 16, borderRadius: 16, borderWidth: 1, borderColor: '#F0F2F5', marginBottom: 12, flexDirection: 'row', alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 1 }}
+              >
                 <View style={{ width: 48, height: 48, borderRadius: 12, backgroundColor: '#FAFAFA', alignItems: 'center', justifyContent: 'center', marginRight: 16 }}>
                   {getFileIcon(mat.file_type)}
                 </View>
@@ -116,7 +139,7 @@ export default function TeacherUploadScreen() {
                     </View>
                   )}
                 </View>
-              </View>
+              </TouchableOpacity>
             ))
           )}
         </View>

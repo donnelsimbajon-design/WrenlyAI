@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import {
-  View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Animated,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
-import { useLocalSearchParams, router } from 'expo-router';
-import { Feather, Ionicons } from '@expo/vector-icons';
-import { useAuth } from '@/modules/security/useAuth';
-import { useClassroom } from '@/modules/classroom/useClassroom';
 import { AnnouncementCard } from '@/components/AnnouncementCard';
 import { theme } from '@/config/theme';
+import { useClassroom } from '@/modules/classroom/useClassroom';
+import { useAuth } from '@/modules/security/useAuth';
+import { Feather, Ionicons } from '@expo/vector-icons';
+import { router, useLocalSearchParams } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useState } from 'react';
+import {
+    ActivityIndicator,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Tab = 'Lessons' | 'Chat' | 'Announcements';
 const TABS: Tab[] = ['Lessons', 'Chat', 'Announcements'];
@@ -20,6 +24,7 @@ export default function StudentClassroomDetail() {
   const {
     currentClassroom, announcements, materials, isLoading,
     fetchClassroom, fetchAnnouncements, fetchMaterials,
+    subscribeToUpdates, unsubscribeFromUpdates,
   } = useClassroom();
 
   const [activeTab, setActiveTab] = useState<Tab>('Lessons');
@@ -29,6 +34,16 @@ export default function StudentClassroomDetail() {
     fetchClassroom(id);
     fetchAnnouncements(id);
     fetchMaterials(id);
+    
+    // Enable real-time subscriptions for live updates
+    const setupSubscriptions = async () => {
+      await subscribeToUpdates(id);
+    };
+    setupSubscriptions();
+
+    return () => {
+      unsubscribeFromUpdates();
+    };
   }, [id]);
 
   if (isLoading && !currentClassroom) {

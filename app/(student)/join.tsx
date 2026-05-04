@@ -1,26 +1,33 @@
+import { QRCodeScanner } from '@/components/QRCodeScanner';
+import { theme } from '@/config/theme';
+import { useToast } from '@/hooks/useToast';
+import { useClassroom } from '@/modules/classroom/useClassroom';
+import { useAuth } from '@/modules/security/useAuth';
+import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import React, { useRef, useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity,
-  KeyboardAvoidingView, Platform, ScrollView,
   ActivityIndicator, Animated,
+  KeyboardAvoidingView,
+  Modal,
+  Platform, ScrollView,
+  Text, TextInput, TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
-import { router } from 'expo-router';
-import { Feather } from '@expo/vector-icons';
-import { useAuth } from '@/modules/security/useAuth';
-import { useClassroom } from '@/modules/classroom/useClassroom';
-import { theme } from '@/config/theme';
 
 const CODE_LENGTH = 6;
 
 export default function JoinClassroomScreen() {
   const { user } = useAuth();
   const { joinClassroom, isJoining } = useClassroom();
+  const toast = useToast();
 
   const [code, setCode] = useState<string[]>(Array(CODE_LENGTH).fill(''));
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState<string | null>(null); // classroom name on success
+  const [success, setSuccess] = useState<string | null>(null);
+  const [showScanner, setShowScanner] = useState(false);
   const inputRefs = useRef<(TextInput | null)[]>([]);
   const successScale = useRef(new Animated.Value(0)).current;
   const successOpacity = useRef(new Animated.Value(0)).current;
@@ -49,22 +56,34 @@ export default function JoinClassroomScreen() {
     }
   };
 
+  const handleScanSuccess = (scannedCode: string) => {
+    const codeArray = scannedCode.split('');
+    setCode(codeArray);
+    setShowScanner(false);
+    setError('');
+  };
+
   const handleJoin = async () => {
     if (!isComplete) return;
     setError('');
 
     if (!user) {
-      setError('You must be logged in to join a class.');
+      const msg = 'You must be logged in to join a class.';
+      setError(msg);
+      toast.warning(msg);
       return;
     }
 
     const { classroom, error: joinError } = await joinClassroom(fullCode, user.id);
 
     if (joinError || !classroom) {
-      setError(joinError?.message ?? 'Class not found. Check the code and try again.');
+      const msg = joinError?.message ?? 'Class not found. Check the code and try again.';
+      setError(msg);
+      toast.error(msg);
       return;
     }
 
+    toast.success('Successfully joined class!');
     setSuccess(classroom.name);
     Animated.parallel([
       Animated.spring(successScale, { toValue: 1, useNativeDriver: Platform.OS !== 'web', damping: 12 }),
@@ -152,6 +171,23 @@ export default function JoinClassroomScreen() {
                 </View>
               ) : <View style={{ height: 26 }} />}
 
+              {/* Scanner button */}
+              <TouchableOpacity
+                onPress={() => setShowScanner(true)}
+                style={{
+                  width: '100%', paddingVertical: 12, borderRadius: 14,
+                  backgroundColor: '#F3F4F6',
+                  alignItems: 'center', justifyContent: 'center',
+                  flexDirection: 'row',
+                  marginBottom: 12,
+                }}
+              >
+                <Feather name="camera" size={16} color={theme.colors.wrenly.primary} style={{ marginRight: 8 }} />
+                <Text style={{ color: theme.colors.wrenly.primary, fontWeight: '700', fontSize: 15 }}>
+                  Scan QR Code
+                </Text>
+              </TouchableOpacity>
+
               {/* Join button */}
               <TouchableOpacity
                 onPress={handleJoin}
@@ -209,6 +245,20 @@ export default function JoinClassroomScreen() {
 
         </ScrollView>
       </KeyboardAvoidingView>
+
+      {/* QR Code Scanner Modal */}
+      <Modal
+        visible={showScanner}
+        animationType="slide"
+        onRequestClose={() => setShowScanner(false)}
+      >
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#000' }}>
+          <QRCodeScanner
+            onScanSuccess={handleScanSuccess}
+            onClose={() => setShowScanner(false)}
+          />
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   );
 }

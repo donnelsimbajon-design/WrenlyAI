@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect } from 'react';
-import * as DocumentPicker from 'expo-document-picker';
 import { useAuth } from '@/modules/security/useAuth';
+import * as DocumentPicker from 'expo-document-picker';
+import { useCallback, useEffect, useState } from 'react';
 import { MaterialsRepository } from './materials.repository';
 
 export function useMaterialUpload(classroomId?: string) {
@@ -58,7 +58,12 @@ export function useMaterialUpload(classroomId?: string) {
       const path = `${user.id}/${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
       
       // Upload to Storage
-      await MaterialsRepository.uploadFileToStorage(file, path);
+      try {
+        await MaterialsRepository.uploadFileToStorage(file, path);
+      } catch (uploadErr: any) {
+        console.error('Storage upload failed:', uploadErr);
+        throw new Error(`File upload failed: ${uploadErr.message}`);
+      }
       
       setUploadProgress(50);
       setProcessingStatus('Extracting text and analyzing content...');
@@ -66,7 +71,7 @@ export function useMaterialUpload(classroomId?: string) {
       const materialType = ext === 'mp4' ? 'mp4' : ext === 'pptx' || ext === 'ppt' ? 'pptx' : ext === 'docx' || ext === 'doc' ? 'docx' : 'pdf';
       
       // For now we allow null classroom_id until a class is selected
-      await MaterialsRepository.createMaterialRecord({
+      const material = await MaterialsRepository.createMaterialRecord({
         classroom_id: classroomId || null,
         teacher_id: user.id,
         title: file.name,
@@ -77,23 +82,36 @@ export function useMaterialUpload(classroomId?: string) {
 
       setUploadProgress(70);
       
-      // Simulate backend AI trigger taking time
+      // Simulate backend AI trigger taking time, then mark as done
+      const updateStatusAfterDelay = async () => {
+        try {
+          await MaterialsRepository.updateMaterialStatus(material.id, 'done');
+          console.log('Material status updated to done:', material.id);
+          setUploadProgress(100);
+          setProcessingStatus('Done! Lesson structure prepared.');
+          // Refresh materials list to show updated status
+          await new Promise(resolve => setTimeout(resolve, 500));
+          await fetchRecent();
+        } catch (err) {
+          console.error('Failed to update material status:', err);
+        }
+      };
+
+      setTimeout(updateStatusAfterDelay, 2500);
+
+      // Also set up a cleanup timeout to reset UI
       setTimeout(() => {
-        setUploadProgress(100);
-        setProcessingStatus('Done! Lesson structure prepared.');
-        fetchRecent();
-        setTimeout(() => {
-          setIsUploading(false);
-          setProcessingStatus(null);
-          setUploadProgress(0);
-        }, 3000);
-      }, 2500);
+        setIsUploading(false);
+        setProcessingStatus(null);
+        setUploadProgress(0);
+      }, 6000);
 
       return { success: true };
     } catch (err: any) {
       setIsUploading(false);
       setProcessingStatus(null);
-      return { error: err.message };
+      console.error('Upload error:', err);
+      return { error: err.message || 'Upload failed. Please check your connection and try again.' };
     }
   };
 
