@@ -218,7 +218,7 @@ export default function TeacherDashboard() {
           width: 58, height: 58, borderRadius: 29,
           backgroundColor: theme.colors.wrenly.primary,
           alignItems: 'center', justifyContent: 'center',
-          shadowColor: theme.colors.wrenly.primary,
+          zIndex: 10, elevation: 4,
           }}
       >
         <Feather name="plus" size={26} color="#FFFFFF" />
